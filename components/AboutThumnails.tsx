@@ -214,6 +214,7 @@ export const AboutThumnails: React.FC = () => {
                   alt={item.title}
                   className="w-full h-full object-cover rounded-2xl border border-white/10"
                   loading="lazy"
+                  decoding="async"
                 />
                 {/* Optional subtle bottom gradient for text legibility if you add overlays later */}
                 <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent" />
@@ -253,6 +254,7 @@ export const AboutThumnails: React.FC = () => {
                   alt={item.title}
                   className="w-full h-full object-cover rounded-xl"
                   loading="lazy"
+                  decoding="async"
                 />
               </div>
             </SwiperSlide>

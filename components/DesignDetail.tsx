@@ -48,6 +48,8 @@ export const DesignDetail: React.FC<DesignDetailProps> = ({ categoryTitle, onBac
               src={data.heroImage}
               alt={`${data.title} category image`}
               className="w-full h-full object-cover"
+              loading="lazy"
+              decoding="async"
             />
             <div className="absolute inset-0 bg-gradient-to-t from-dark-bg via-dark-bg/50 to-transparent" />
           </div>

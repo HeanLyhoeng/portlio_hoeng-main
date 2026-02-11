@@ -21,6 +21,7 @@ interface AllWorksProps {
 export const AllWorks: React.FC<AllWorksProps> = ({ onBack }) => {
     const [items, setItems] = useState<GalleryItem[]>([]);
     const [loading, setLoading] = useState(true);
+    const [fetchError, setFetchError] = useState<string | null>(null);
     const [selectedItem, setSelectedItem] = useState<GalleryItem | null>(null);
 
     // Helper to shuffle array
@@ -42,179 +43,164 @@ export const AllWorks: React.FC<AllWorksProps> = ({ onBack }) => {
     };
 
     useEffect(() => {
-        const fetchAllData = async () => {
-            console.log('[AllWorks] fetchAllData invoked');
+        let cancelled = false;
 
+        const fetchAllData = async () => {
             if (!isSupabaseConfigured || !supabase) {
-                console.warn('[AllWorks] Supabase is not configured. Skipping fetch.');
-                setLoading(false);
+                if (!cancelled) setLoading(false);
                 return;
             }
 
-            setLoading(true);
-
-            const gatheredItems: GalleryItem[] = [];
-
-            // 1. Graphic Design (Storage: project-nanobot)
             try {
-                console.log('[AllWorks] Fetching Graphic (project-nanobot storage)...');
-                const graphicRes = await supabase.storage
-                    .from('projects')
-                    .list('project-nanobot', {
-                        limit: 100,
-                        offset: 0,
-                        sortBy: { column: 'created_at', order: 'desc' }
-                    });
+                if (!cancelled) setLoading(true);
+                if (!cancelled) setFetchError(null);
+                // Execute all fetches in parallel
+                const results = await Promise.allSettled([
+                    // 1. Graphic Design (Storage: project-nanobot)
+                    supabase.storage
+                        .from('projects')
+                        .list('project-nanobot', {
+                            limit: 100,
+                            offset: 0,
+                            sortBy: { column: 'created_at', order: 'desc' }
+                        }),
 
-                console.log('[AllWorks] Graphic response:', JSON.stringify({
-                    error: graphicRes.error,
-                    count: graphicRes.data?.length ?? 0
-                }, null, 2));
+                    // 2. Portfolio (Storage: project-thumbnails)
+                    supabase.storage
+                        .from('projects')
+                        .list('project-thumbnails', {
+                            limit: 100,
+                            offset: 0,
+                            sortBy: { column: 'created_at', order: 'desc' }
+                        }),
 
-                if (graphicRes.error) {
-                    console.error('[AllWorks] Graphic fetch FAILED:', graphicRes.error);
-                } else if (graphicRes.data) {
-                    const graphics = graphicRes.data
-                        .filter(file => file.name !== '.emptyFolderPlaceholder')
-                        .map((file, index) => {
-                            const { data } = supabase.storage
-                                .from('projects')
-                                .getPublicUrl(`project-nanobot/${file.name}`);
+                    // 3. Video Editing (Table: video_links)
+                    supabase
+                        .from('video_links')
+                        .select('*')
+                        .limit(100),
 
+                    // 4. Web Design (Table: projects, category === 'WEB DESIGN')
+                    supabase
+                        .from('projects')
+                        .select('id, title, category, image_url, created_at') // Optimized selection
+                        .eq('category', 'WEB DESIGN')
+                        .limit(100)
+                ]);
+
+                const gatheredItems: GalleryItem[] = [];
+                const [graphicRes, portfolioRes, videoRes, webRes] = results;
+
+                // 1. Process Graphic
+                if (graphicRes.status === 'fulfilled') {
+                    const { data, error } = graphicRes.value;
+                    if (error) {
+                        console.error('[AllWorks] Graphic fetch FAILED:', error);
+                    } else if (data) {
+                        const graphics = data
+                            .filter(file => file.name !== '.emptyFolderPlaceholder')
+                            .map((file, index) => {
+                                const { data } = supabase.storage
+                                    .from('projects')
+                                    .getPublicUrl(`project-nanobot/${file.name}`);
+
+                                return {
+                                    id: `graphic-${index}`,
+                                    title: file.name.split('.')[0].replace(/-/g, ' '),
+                                    category: 'Graphic Design' as ItemCategory,
+                                    imageUrl: data.publicUrl,
+                                    aspectRatio: 'aspect-[2/3]'
+                                };
+                            });
+                        gatheredItems.push(...graphics);
+                    }
+                } else {
+                    console.error('[AllWorks] Graphic fetch EXCEPTION:', graphicRes.reason);
+                }
+
+                // 2. Process Portfolio
+                if (portfolioRes.status === 'fulfilled') {
+                    const { data, error } = portfolioRes.value;
+                    if (error) {
+                        console.error('[AllWorks] Portfolio fetch FAILED:', error);
+                    } else if (data) {
+                        const portfolios = data
+                            .filter(file => file.name !== '.emptyFolderPlaceholder')
+                            .map((file, index) => {
+                                const { data } = supabase.storage
+                                    .from('projects')
+                                    .getPublicUrl(`project-thumbnails/${file.name}`);
+
+                                return {
+                                    id: `portfolio-${index}`,
+                                    title: file.name.split('.')[0].replace(/-/g, ' '),
+                                    category: 'Portfolio' as ItemCategory,
+                                    imageUrl: data.publicUrl,
+                                    aspectRatio: 'aspect-video'
+                                };
+                            });
+                        gatheredItems.push(...portfolios);
+                    }
+                } else {
+                    console.error('[AllWorks] Portfolio fetch EXCEPTION:', portfolioRes.reason);
+                }
+
+                // 3. Process Video
+                if (videoRes.status === 'fulfilled') {
+                    const { data, error } = videoRes.value;
+                    if (error) {
+                        console.error('[AllWorks] Video fetch FAILED:', error);
+                    } else if (data) {
+                        const videos = data.map((item: any, index: number) => {
+                            const videoId = getYoutubeId(item.youtube_url);
                             return {
-                                id: `graphic-${index}`,
-                                title: file.name.split('.')[0].replace(/-/g, ' '),
-                                category: 'Graphic Design' as ItemCategory,
-                                imageUrl: data.publicUrl,
-                                aspectRatio: 'aspect-[2/3]'
+                                id: item.id?.toString() || `video-${index}`,
+                                title: item.project_ref || 'Untitled Video',
+                                category: 'Video Editing' as ItemCategory,
+                                imageUrl: videoId
+                                    ? `https://img.youtube.com/vi/${videoId}/maxresdefault.jpg`
+                                    : 'https://placehold.co/400x600/1a1a1a/white?text=No+Thumbnail',
+                                aspectRatio: 'aspect-video',
+                                videoUrl: videoId ? `https://www.youtube.com/embed/${videoId}` : undefined
                             };
                         });
-
-                    console.log(`[AllWorks] Graphic loaded: ${graphics.length} items`);
-                    gatheredItems.push(...graphics);
+                        gatheredItems.push(...videos);
+                    }
+                } else {
+                    console.error('[AllWorks] Video fetch EXCEPTION:', videoRes.reason);
                 }
-            } catch (error) {
-                console.error('[AllWorks] Graphic fetch EXCEPTION:', error);
-            }
 
-            // 2. Portfolio (Storage: project-thumbnails)
-            try {
-                console.log('[AllWorks] Fetching Portfolio (project-thumbnails storage)...');
-                const portfolioRes = await supabase.storage
-                    .from('projects')
-                    .list('project-thumbnails', {
-                        limit: 100,
-                        offset: 0,
-                        sortBy: { column: 'created_at', order: 'desc' }
-                    });
-
-                console.log('[AllWorks] Portfolio response:', JSON.stringify({
-                    error: portfolioRes.error,
-                    count: portfolioRes.data?.length ?? 0
-                }, null, 2));
-
-                if (portfolioRes.error) {
-                    console.error('[AllWorks] Portfolio fetch FAILED:', portfolioRes.error);
-                } else if (portfolioRes.data) {
-                    const portfolios = portfolioRes.data
-                        .filter(file => file.name !== '.emptyFolderPlaceholder')
-                        .map((file, index) => {
-                            const { data } = supabase.storage
-                                .from('projects')
-                                .getPublicUrl(`project-thumbnails/${file.name}`);
-
-                            return {
-                                id: `portfolio-${index}`,
-                                title: file.name.split('.')[0].replace(/-/g, ' '),
-                                category: 'Portfolio' as ItemCategory,
-                                imageUrl: data.publicUrl,
-                                aspectRatio: 'aspect-video'
-                            };
-                        });
-
-                    console.log(`[AllWorks] Portfolio loaded: ${portfolios.length} items`);
-                    gatheredItems.push(...portfolios);
+                // 4. Process Web
+                if (webRes.status === 'fulfilled') {
+                    const { data, error } = webRes.value;
+                    if (error) {
+                        console.error('[AllWorks] Web fetch FAILED:', error);
+                    } else if (data) {
+                        const webItems = data.map((item: any, index: number) => ({
+                            id: item.id?.toString() || `web-${index}`,
+                            title: item.title,
+                            category: 'Web Design' as ItemCategory,
+                            imageUrl: item.image_url || 'https://placehold.co/400x600/1a1a1a/white?text=No+Image',
+                            aspectRatio: 'aspect-[2/3]'
+                        }));
+                        gatheredItems.push(...webItems);
+                    }
+                } else {
+                    console.error('[AllWorks] Web fetch EXCEPTION:', webRes.reason);
                 }
+
+                const shuffled = shuffleArray(gatheredItems);
+                if (!cancelled) setItems(shuffled);
             } catch (error) {
-                console.error('[AllWorks] Portfolio fetch EXCEPTION:', error);
+                console.error('[AllWorks] Critical error in fetchAllData:', error);
+                if (!cancelled) setFetchError('Failed to load gallery. Please refresh the page.');
+            } finally {
+                if (!cancelled) setLoading(false);
             }
-
-            // 3. Video Editing (Table: video_links)
-            try {
-                console.log('[AllWorks] Fetching Video (video_links table)...');
-                const videoRes = await supabase
-                    .from('video_links')
-                    .select('*');
-
-                console.log('[AllWorks] Video response:', JSON.stringify({
-                    error: videoRes.error,
-                    count: videoRes.data?.length ?? 0
-                }, null, 2));
-
-                if (videoRes.error) {
-                    console.error('[AllWorks] Video fetch FAILED:', videoRes.error);
-                } else if (videoRes.data) {
-                    const videos = videoRes.data.map((item: any, index: number) => {
-                        const videoId = getYoutubeId(item.youtube_url);
-                        return {
-                            id: item.id?.toString() || `video-${index}`,
-                            title: item.project_ref || 'Untitled Video',
-                            category: 'Video Editing' as ItemCategory,
-                            imageUrl: videoId
-                                ? `https://img.youtube.com/vi/${videoId}/maxresdefault.jpg`
-                                : 'https://placehold.co/400x600/1a1a1a/white?text=No+Thumbnail',
-                            aspectRatio: 'aspect-video',
-                            videoUrl: videoId ? `https://www.youtube.com/embed/${videoId}` : undefined
-                        };
-                    });
-
-                    console.log(`[AllWorks] Video loaded: ${videos.length} items`);
-                    gatheredItems.push(...videos);
-                }
-            } catch (error) {
-                console.error('[AllWorks] Video fetch EXCEPTION:', error);
-            }
-
-            // 4. Web Design (Table: projects, category === 'WEB DESIGN')
-            try {
-                console.log("[AllWorks] Fetching Web (projects table, category 'WEB DESIGN')...");
-                const webRes = await supabase
-                    .from('projects')
-                    .select('*')
-                    .eq('category', 'WEB DESIGN');
-
-                console.log('[AllWorks] Web response:', JSON.stringify({
-                    error: webRes.error,
-                    count: webRes.data?.length ?? 0
-                }, null, 2));
-
-                if (webRes.error) {
-                    console.error('[AllWorks] Web fetch FAILED:', webRes.error);
-                } else if (webRes.data) {
-                    const webItems = webRes.data.map((item: any, index: number) => ({
-                        id: item.id?.toString() || `web-${index}`,
-                        title: item.title,
-                        category: 'Web Design' as ItemCategory,
-                        imageUrl: item.image_url || 'https://placehold.co/400x600/1a1a1a/white?text=No+Image',
-                        aspectRatio: 'aspect-[2/3]'
-                    }));
-
-                    console.log(`[AllWorks] Web loaded: ${webItems.length} items`);
-                    gatheredItems.push(...webItems);
-                }
-            } catch (error) {
-                console.error('[AllWorks] Web fetch EXCEPTION:', error);
-            }
-
-            console.log(`[AllWorks] Total gathered items before shuffle: ${gatheredItems.length}`);
-            const shuffled = shuffleArray(gatheredItems);
-            console.log('[AllWorks] Items after shuffle (first 5):', shuffled.slice(0, 5));
-
-            setItems(shuffled);
-            setLoading(false);
         };
 
         fetchAllData();
+        return () => { cancelled = true; };
     }, []);
 
     // Handle back via prop or hash
@@ -247,9 +233,20 @@ export const AllWorks: React.FC<AllWorksProps> = ({ onBack }) => {
             </div>
 
             {/* Content */}
-            {loading ? (
+            {fetchError ? (
+                <div className="flex flex-col items-center justify-center py-16 px-4 text-center">
+                    <p className="text-gray-400 mb-4">{fetchError}</p>
+                    <button
+                        type="button"
+                        onClick={() => window.location.reload()}
+                        className="px-4 py-2 bg-neon-primary/20 hover:bg-neon-primary/30 rounded-lg text-white text-sm font-medium transition-colors"
+                    >
+                        Retry
+                    </button>
+                </div>
+            ) : loading ? (
                 <div className="flex justify-center items-center h-64">
-                    <div className="w-12 h-12 border-4 border-neon-primary border-t-transparent rounded-full animate-spin"></div>
+                    <div className="w-12 h-12 border-4 border-neon-primary border-t-transparent rounded-full animate-spin" />
                 </div>
             ) : (
                 <div className="columns-1 sm:columns-2 md:columns-3 lg:columns-4 gap-4 space-y-4 mx-auto pb-20">
@@ -267,6 +264,7 @@ export const AllWorks: React.FC<AllWorksProps> = ({ onBack }) => {
                                     alt={item.title}
                                     className="w-full h-auto block"
                                     loading="lazy"
+                                    decoding="async"
                                 />
 
                                 {/* Overlay */}
@@ -320,6 +318,8 @@ export const AllWorks: React.FC<AllWorksProps> = ({ onBack }) => {
                                 src={selectedItem.imageUrl}
                                 alt={selectedItem.title}
                                 className="max-w-full max-h-[90vh] object-contain rounded-lg shadow-2xl"
+                                loading="lazy"
+                                decoding="async"
                             />
                         )}
 
@@ -330,19 +330,6 @@ export const AllWorks: React.FC<AllWorksProps> = ({ onBack }) => {
                     </div>
                 </div>
             )}
-
-            {/* Aggressive Debugging: "Truth" Box */}
-            <div className="mt-8 p-4 rounded-lg bg-black/60 text-xs text-gray-300 border border-red-500/60">
-                <div className="flex justify-between items-center mb-2">
-                    <span className="font-semibold text-red-400">DEBUG: AllWorks items state</span>
-                    <span className="text-[10px] uppercase tracking-wide text-gray-500">
-                        loading: {loading ? 'true' : 'false'} | count: {items.length}
-                    </span>
-                </div>
-                <pre className="whitespace-pre-wrap break-all max-h-80 overflow-auto text-[10px]">
-                    {JSON.stringify(items, null, 2)}
-                </pre>
-            </div>
         </div>
     );
 };

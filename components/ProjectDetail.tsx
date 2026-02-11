@@ -651,6 +651,7 @@ export const ProjectDetail: React.FC<ProjectDetailProps> = ({ projectId, onBack 
                   alt={`${project.title} - Header ${idx + 1}`}
                   className="w-full h-full object-cover object-center"
                   loading={idx === 0 ? "eager" : "lazy"}
+                  decoding="async"
                   onError={(e) => {
                     (e.target as HTMLImageElement).src = project.image || "https://via.placeholder.com/1920x1080/1e293b/00f3ff?text=Image+Placeholder";
                   }}
@@ -771,6 +772,8 @@ export const ProjectDetail: React.FC<ProjectDetailProps> = ({ projectId, onBack 
                             src={item}
                             alt={itemTitle}
                             className="w-full h-auto object-contain object-center group-hover:scale-[1.01] transition-transform duration-300"
+                            loading="lazy"
+                            decoding="async"
                             onError={(e) => {
                               const target = e.target as HTMLImageElement;
                               if (project.image && target.src !== project.image) {
@@ -779,7 +782,6 @@ export const ProjectDetail: React.FC<ProjectDetailProps> = ({ projectId, onBack 
                                 target.src = "https://via.placeholder.com/400x400/1e293b/00f3ff?text=Image+Placeholder";
                               }
                             }}
-                            loading="lazy"
                           />
                         )}
                         <div className="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-colors duration-300" />
@@ -864,6 +866,8 @@ export const ProjectDetail: React.FC<ProjectDetailProps> = ({ projectId, onBack 
                   src={displayImages[lightboxIndex]}
                   alt={`${project.title} - ${isVideoFile(displayImages[lightboxIndex]) ? 'Video' : 'Image'} ${lightboxIndex + 1}`}
                   className="max-w-full max-h-full object-contain rounded-lg"
+                  loading="lazy"
+                  decoding="async"
                   onError={(e) => {
                     (e.target as HTMLImageElement).src = project.image || "https://via.placeholder.com/1200x800/1e293b/00f3ff?text=Image+Placeholder";
                   }}

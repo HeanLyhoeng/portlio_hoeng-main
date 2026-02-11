@@ -115,10 +115,10 @@ const App: React.FC = () => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
-  // Section definitions
+  // Section definitions — ids (work, services, about) must match Header anchor hrefs (#work) and Footer #contact
   const sections: Record<string, SectionComponent> = {
     portfolio: {
-      id: 'portfolio',
+      id: 'work',
       name: 'Portfolio',
       component: <ExploreMyWork />
     },
@@ -233,6 +233,7 @@ const App: React.FC = () => {
     const sectionElement = (
       <div
         key={section.id}
+        id={section.id}
         draggable={isAdminMode}
         onDragStart={() => handleDragStart(section.id)}
         onDragOver={handleDragOver}

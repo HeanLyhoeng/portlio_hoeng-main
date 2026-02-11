@@ -13,7 +13,7 @@ export const ProjectGallery: React.FC<{
         {/* ...existing original markup should be preserved elsewhere... */}
         {items.map((it, i) => (
           <figure key={i} className="original-item">
-            <img src={it.src} alt={it.alt} />
+            <img src={it.src} alt={it.alt || ''} loading="lazy" decoding="async" />
             {it.caption && <figcaption>{it.caption}</figcaption>}
           </figure>
         ))}
@@ -27,7 +27,7 @@ export const ProjectGallery: React.FC<{
       <div className="two-col-inner">
         {items.map((it, i) => (
           <figure key={i} className={`gallery-item item-${i}`}>
-            <img src={it.src} alt={it.alt || `project image ${i + 1}`} />
+            <img src={it.src} alt={it.alt || `project image ${i + 1}`} loading="lazy" decoding="async" />
             {it.caption && <figcaption className="gallery-caption">{it.caption}</figcaption>}
           </figure>
         ))}

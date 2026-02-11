@@ -53,7 +53,7 @@ export const Footer: React.FC = () => {
     ];
 
     return (
-        <footer className="bg-black border-t border-white/10 pt-16 pb-8">
+        <footer id="contact" className="bg-black border-t border-white/10 pt-16 pb-8">
             <div className="max-w-7xl mx-auto px-4 sm:px-6">
                 <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-8 mb-12">
 
@@ -64,6 +64,8 @@ export const Footer: React.FC = () => {
                                 src="https://jqszlmcwearhovsjknat.supabase.co/storage/v1/object/public/avatars/freepik__a-white-abstract-cube-logo-is-centered-on-a-black-__84990.png"
                                 alt="LYHOENG-DESIGN Logo"
                                 className="w-10 h-10 object-contain rounded-md"
+                                loading="lazy"
+                                decoding="async"
                             />
                             <span className="text-xl font-bold tracking-wider font-mono text-white">
                                 LYHOENG-DESIGN

@@ -45,6 +45,8 @@ export const ImageViewerModal: React.FC<ImageViewerModalProps> = ({ isOpen, onCl
                             src={imageUrl}
                             alt={title || "Project Image"}
                             className="max-w-full max-h-[85vh] object-contain shadow-2xl rounded-md"
+                            loading="lazy"
+                            decoding="async"
                         />
 
                         {title && (

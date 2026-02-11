@@ -17,6 +17,7 @@ export const ExploreMyWork: React.FC = () => {
     const [portfolioProjects, setPortfolioProjects] = useState<ProjectData[]>([]);
     const [heroSliderItems, setHeroSliderItems] = useState<HeroSliderItem[]>([]);
     const [loading, setLoading] = useState(true);
+    const [fetchError, setFetchError] = useState<string | null>(null);
 
     // Video Modal State
     const [selectedVideoUrl, setSelectedVideoUrl] = useState<string | null>(null);
@@ -35,56 +36,89 @@ export const ExploreMyWork: React.FC = () => {
     };
 
     useEffect(() => {
+        let cancelled = false;
+
         const fetchData = async () => {
             if (!isSupabaseConfigured || !supabase) {
-                setLoading(false);
+                if (!cancelled) setLoading(false);
                 return;
             }
 
             try {
-                setLoading(true);
+                if (!cancelled) setLoading(true);
+                if (!cancelled) setFetchError(null);
 
-                const [
-                    graphicRes,
-                    portfolioRes,
-                    videoRes,
-                    allProjectsRes,
-                    heroSliderRes // Fetch hero slider data
-                ] = await Promise.all([
-                    // 1. Graphic Design: Storage (Try, but fallback to DB)
-                    supabase.storage.from('projects').list('nanobot', { limit: 100, offset: 0, sortBy: { column: 'created_at', order: 'desc' } }),
+                // Use Promise.allSettled to prevent one failure from breaking everything
+                const results = await Promise.allSettled([
+                    // 1. Graphic Design: Storage
+                    supabase.storage.from('projects').list('nanobot', { limit: 50, offset: 0, sortBy: { column: 'created_at', order: 'desc' } }),
 
-                    // 2. Portfolio & Misc: Storage (Try, but fallback to DB)
-                    supabase.storage.from('projects').list('project-thumbnails', { limit: 100, offset: 0, sortBy: { column: 'created_at', order: 'desc' } }),
+                    // 2. Portfolio & Misc: Storage
+                    supabase.storage.from('projects').list('project-thumbnails', { limit: 50, offset: 0, sortBy: { column: 'created_at', order: 'desc' } }),
 
-                    // 3. Video Editing: Table -> video_links
-                    supabase.from('video_links').select('*'),
+                    // 3. Video Editing: Table
+                    supabase.from('video_links').select('*').limit(25),
 
-                    // 4. Fetch ALL projects from DB to distribute/fallback
-                    supabase.from('projects').select('*').order('created_at', { ascending: false }),
+                    // 4. Hero Slider
+                    (supabase as any).from('hero_slider').select('id, title, description, category, image_url, video_url, display_order').order('display_order', { ascending: true }).limit(10),
 
-                    // 5. Fetch hero slider items from hero_slider table
-                    supabase
-                        .from('hero_slider')
-                        .select('id, title, description, category, image_url, video_url, display_order')
-                        .order('display_order', { ascending: true })
-                        .limit(10)
+                    // 5. Graphic Design DB (Specific Query)
+                    supabase.from('projects')
+                        .select('id, title, category, image_url, created_at')
+                        .ilike('category', '%GRAPHIC%')
+                        .order('created_at', { ascending: false })
+                        .limit(20),
+
+                    // 6. Portfolio DB (Specific Query)
+                    supabase.from('projects')
+                        .select('id, title, category, image_url, created_at')
+                        .or('category.ilike.%PORTFOLIO%,category.ilike.%THUMBNAIL%,category.ilike.%MISC%')
+                        .order('created_at', { ascending: false })
+                        .limit(20),
+
+                    // 7. Web Design DB (Specific Query)
+                    supabase.from('projects')
+                        .select('id, title, category, image_url, created_at')
+                        .or('category.eq.WEB DESIGN,category.eq.WEB,category.ilike.%UI/UX%')
+                        .order('created_at', { ascending: false })
+                        .limit(20)
                 ]);
 
-                console.log('--- SUPABASE DEBUG START ---');
-                console.log('1. Graphic Storage (nanobot):', JSON.stringify({ data: graphicRes.data, error: graphicRes.error }, null, 2));
-                console.log('2. Portfolio Storage (project-thumbnails):', JSON.stringify({ data: portfolioRes.data, error: portfolioRes.error }, null, 2));
-                console.log('3. Video Links Table:', JSON.stringify({ data: videoRes.data, error: videoRes.error }, null, 2));
-                console.log('4. Projects Table (DB):', JSON.stringify({ data: allProjectsRes.data, error: allProjectsRes.error }, null, 2));
-                console.log('5. Hero Slider Table:', JSON.stringify({ data: heroSliderRes.data, error: heroSliderRes.error }, null, 2));
+                const [
+                    graphicStorageRes,
+                    portfolioStorageRes,
+                    videoRes,
+                    heroSliderRes,
+                    graphicDbRes,
+                    portfolioDbRes,
+                    webDbRes
+                ] = results;
+
+                // Helper to safely get data from settled promise
+                if (cancelled) return;
+
+                const getData = (result: PromiseSettledResult<any>) =>
+                    (result.status === 'fulfilled' && result.value.data) ? result.value.data : [];
+
+                const graphicStorageData = getData(graphicStorageRes);
+                const portfolioStorageData = getData(portfolioStorageRes);
+                const videoData = getData(videoRes);
+                const heroSliderData = getData(heroSliderRes);
+                const graphicDbData = getData(graphicDbRes);
+                const portfolioDbData = getData(portfolioDbRes);
+                const webDbData = getData(webDbRes);
+
+                // Log errors if any (optional but good for debugging)
+                results.forEach((res, idx) => {
+                    if (res.status === 'rejected') console.error(`Fetch index ${idx} failed:`, res.reason);
+                });
 
                 // --- PROCESSING & FALLBACK STRATEGY ---
-                const dbProjects = allProjectsRes.data || [];
 
-                // 1. Graphic Design: Combine Storage + DB
-                const storageGraphics = (graphicRes.data || [])
-                    .filter(file => file.name !== '.emptyFolderPlaceholder')
-                    .map((file, index) => {
+                // 1. Graphic Design
+                const storageGraphics = graphicStorageData
+                    .filter((file: any) => file.name !== '.emptyFolderPlaceholder')
+                    .map((file: any, index: number) => {
                         const { data } = supabase.storage.from('projects').getPublicUrl(`nanobot/${file.name}`);
                         return {
                             id: `graphic-storage-${index}`,
@@ -96,9 +130,7 @@ export const ExploreMyWork: React.FC = () => {
                         };
                     });
 
-                const dbGraphics = dbProjects.filter((p: any) =>
-                    p.category && p.category.toUpperCase().includes('GRAPHIC')
-                ).map((item: any) => ({
+                const dbGraphics = graphicDbData.map((item: any) => ({
                     id: item.id,
                     title: item.title,
                     category: 'Graphic Design',
@@ -106,12 +138,13 @@ export const ExploreMyWork: React.FC = () => {
                     year: new Date(item.created_at).getFullYear().toString(),
                 }));
 
+                if (cancelled) return;
                 setGraphicProjects([...storageGraphics, ...dbGraphics]);
 
-                // 2. Portfolio / Thumbnail: Combine Storage + DB
-                const storagePortfolio = (portfolioRes.data || [])
-                    .filter(file => file.name !== '.emptyFolderPlaceholder')
-                    .map((file, index) => {
+                // 2. Portfolio / Thumbnail
+                const storagePortfolio = portfolioStorageData
+                    .filter((file: any) => file.name !== '.emptyFolderPlaceholder')
+                    .map((file: any, index: number) => {
                         const { data } = supabase.storage.from('projects').getPublicUrl(`project-thumbnails/${file.name}`);
                         return {
                             id: `portfolio-storage-${index}`,
@@ -122,10 +155,7 @@ export const ExploreMyWork: React.FC = () => {
                         };
                     });
 
-                const dbPortfolio = dbProjects.filter((p: any) => {
-                    const cat = p.category ? p.category.toUpperCase() : '';
-                    return cat.includes('PORTFOLIO') || cat.includes('THUMBNAIL') || cat.includes('MISC');
-                }).map((item: any) => ({
+                const dbPortfolio = portfolioDbData.map((item: any) => ({
                     id: item.id,
                     title: item.title,
                     category: 'Portfolio',
@@ -133,13 +163,11 @@ export const ExploreMyWork: React.FC = () => {
                     year: new Date(item.created_at).getFullYear().toString(),
                 }));
 
+                if (cancelled) return;
                 setPortfolioProjects([...storagePortfolio, ...dbPortfolio]);
 
-                // 3. Web Design: Strictly DB (Filter from ALL projects)
-                const dbWeb = dbProjects.filter((p: any) => {
-                    const cat = p.category ? p.category.toUpperCase() : '';
-                    return cat === 'WEB DESIGN' || cat === 'WEB' || cat.includes('UI/UX');
-                }).map((item: any, index: number) => ({
+                // 3. Web Design
+                const dbWeb = webDbData.map((item: any, index: number) => ({
                     id: item.id,
                     title: item.title,
                     category: 'Web Design',
@@ -148,11 +176,12 @@ export const ExploreMyWork: React.FC = () => {
                     isNew: index < 1
                 }));
 
+                if (cancelled) return;
                 setWebProjects(dbWeb);
 
-                // 4. Video Editing (Keep existing working logic)
-                if (videoRes.data) {
-                    const videos = videoRes.data.map((item: any, index: number) => {
+                // 4. Video Editing
+                if (videoData.length > 0) {
+                    const videos = videoData.map((item: any, index: number) => {
                         const videoId = getYoutubeId(item.youtube_url);
                         return {
                             id: item.id?.toString() || `video-${index}`,
@@ -166,12 +195,12 @@ export const ExploreMyWork: React.FC = () => {
                             videoUrl: videoId ? `https://www.youtube.com/embed/${videoId}` : undefined
                         };
                     });
-                    setVideoProjects(videos);
+                    if (!cancelled) setVideoProjects(videos);
                 }
 
                 // 5. Hero Slider Items
-                if (heroSliderRes.data && heroSliderRes.data.length > 0) {
-                    const heroItems: HeroSliderItem[] = heroSliderRes.data.map((item: any) => ({
+                if (heroSliderData.length > 0) {
+                    const heroItems: HeroSliderItem[] = heroSliderData.map((item: any) => ({
                         id: item.id?.toString() || `hero-${item.display_order}`,
                         title: item.title || 'Untitled Project',
                         description: item.description || '',
@@ -180,20 +209,18 @@ export const ExploreMyWork: React.FC = () => {
                         video_url: item.video_url || null,
                         display_order: item.display_order || 0
                     }));
-                    setHeroSliderItems(heroItems);
-                    console.log(`[ExploreMyWork] Loaded ${heroItems.length} hero slider items`);
-                } else {
-                    console.warn('[ExploreMyWork] No hero slider items found in database');
+                    if (!cancelled) setHeroSliderItems(heroItems);
                 }
-
             } catch (error) {
-                console.error('Error fetching data:', error);
+                console.error('Critical error in fetchData:', error);
+                if (!cancelled) setFetchError('Failed to load work. Please refresh the page.');
             } finally {
-                setLoading(false);
+                if (!cancelled) setLoading(false);
             }
         };
 
         fetchData();
+        return () => { cancelled = true; };
     }, []);
 
     const handleProjectClick = (project: ProjectData) => {
@@ -243,9 +270,22 @@ export const ExploreMyWork: React.FC = () => {
 
             {/* 2. Category Rows */}
             <div className="space-y-8 md:space-y-12 pl-0 md:pl-4 min-h-[400px]">
-                {loading ? (
-                    <div className="flex items-center justify-center h-64">
-                        <div className="w-12 h-12 border-4 border-[#FFD700] border-t-transparent rounded-full animate-spin"></div>
+                {fetchError ? (
+                    <div className="flex flex-col items-center justify-center py-16 px-4 text-center">
+                        <p className="text-gray-400 mb-4">{fetchError}</p>
+                        <button
+                            type="button"
+                            onClick={() => window.location.reload()}
+                            className="px-4 py-2 bg-white/10 hover:bg-white/20 rounded-lg text-white text-sm font-medium transition-colors"
+                        >
+                            Retry
+                        </button>
+                    </div>
+                ) : loading ? (
+                    <div className="space-y-12">
+                        {[1, 2, 3].map((i) => (
+                            <SkeletonRow key={i} />
+                        ))}
                     </div>
                 ) : (
                     <>
@@ -312,3 +352,20 @@ export const ExploreMyWork: React.FC = () => {
         </section>
     );
 };
+
+// Skeleton Components for improved perceived performance
+const SkeletonRow = () => (
+    <div className="mb-8">
+        {/* Title Skeleton */}
+        <div className="h-6 w-48 bg-gray-800 rounded mb-4 animate-pulse ml-4 md:ml-0" />
+
+        {/* Cards Row */}
+        <div className="flex gap-4 overflow-hidden px-4 md:px-0">
+            {[1, 2, 3, 4, 5].map((i) => (
+                <div key={i} className="flex-none w-[280px] md:w-[320px] aspect-video bg-gray-900 rounded-lg animate-pulse border border-gray-800/50">
+                    <div className="h-full w-full bg-gradient-to-br from-gray-800/50 to-transparent" />
+                </div>
+            ))}
+        </div>
+    </div>
+);

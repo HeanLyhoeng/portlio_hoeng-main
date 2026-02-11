@@ -48,72 +48,72 @@ export const Header: React.FC = () => {
   // Navigation handler
   const handleNavClick = (e: React.MouseEvent<HTMLAnchorElement>, href: string, isPage: boolean, isHome?: boolean) => {
     e.preventDefault();
-    if (isHome) {
-      window.location.hash = '';
-      window.scrollTo({ top: 0, behavior: 'smooth' });
-      setIsMobileMenuOpen(false);
-    } else if (isPage) {
-      window.location.hash = href;
-      window.scrollTo({ top: 0, behavior: 'smooth' });
-    } else {
-      const currentHash = window.location.hash;
-      const isOnDifferentPage = currentHash && (currentHash.startsWith('#/project/') || currentHash.startsWith('#/design/') || currentHash === '#/about' || currentHash === '#/services' || currentHash === '#/software-sales' || currentHash === '#/pricing');
-
-      if (isOnDifferentPage) {
+    try {
+      if (isHome) {
         window.location.hash = '';
-        setTimeout(() => {
-          window.location.hash = href;
-          const element = document.querySelector(href);
-          if (element) {
-            const headerOffset = 80;
-            const elementPosition = element.getBoundingClientRect().top;
-            const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
-            window.scrollTo({
-              top: offsetPosition,
-              behavior: 'smooth'
-            });
-          }
-        }, 300);
-      } else {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+        setIsMobileMenuOpen(false);
+      } else if (isPage) {
         window.location.hash = href;
-        const element = document.querySelector(href);
-        if (element) {
-          const headerOffset = 80;
-          const elementPosition = element.getBoundingClientRect().top;
-          const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
-          window.scrollTo({
-            top: offsetPosition,
-            behavior: 'smooth'
-          });
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      } else {
+        const currentHash = window.location.hash;
+        const isOnDifferentPage = currentHash && (currentHash.startsWith('#/project/') || currentHash.startsWith('#/design/') || currentHash === '#/about' || currentHash === '#/services' || currentHash === '#/software-sales' || currentHash === '#/pricing');
+
+        if (isOnDifferentPage) {
+          window.location.hash = '';
+          setTimeout(() => {
+            try {
+              window.location.hash = href;
+              // Safe query selector
+              if (href && href.startsWith('#') && !href.includes('/')) {
+                const element = document.querySelector(href);
+                if (element) {
+                  const headerOffset = 80;
+                  const elementPosition = element.getBoundingClientRect().top;
+                  const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
+                  window.scrollTo({
+                    top: offsetPosition,
+                    behavior: 'smooth'
+                  });
+                }
+              }
+            } catch (err) {
+              console.error("Navigation error after timeout:", err);
+            }
+          }, 300);
+        } else {
+          window.location.hash = href;
+          if (href && href.startsWith('#') && !href.includes('/')) {
+            const element = document.querySelector(href);
+            if (element) {
+              const headerOffset = 80;
+              const elementPosition = element.getBoundingClientRect().top;
+              const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
+              window.scrollTo({
+                top: offsetPosition,
+                behavior: 'smooth'
+              });
+            }
+          }
         }
       }
+    } catch (error) {
+      console.error("Navigation error:", error);
+      // Fallback: just try to set location hash if everything else fails
+      window.location.hash = href;
     }
   };
 
   // Handle Contact Button Click (Works from any page)
   const handleContactClick = () => {
-    setIsMobileMenuOpen(false); // Close mobile menu if open
+    try {
+      setIsMobileMenuOpen(false); // Close mobile menu if open
 
-    const isHomePage = window.location.hash === '' || window.location.hash === '#/';
+      const isHomePage = window.location.hash === '' || window.location.hash === '#/';
 
-    if (isHomePage) {
-      // Already on home page, just scroll
-      const element = document.querySelector('#contact');
-      if (element) {
-        const headerOffset = 80;
-        const elementPosition = element.getBoundingClientRect().top;
-        const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
-        window.scrollTo({
-          top: offsetPosition,
-          behavior: 'smooth'
-        });
-      }
-    } else {
-      // Navigate to home first
-      window.location.hash = '';
-
-      // Wait for navigation then scroll
-      setTimeout(() => {
+      if (isHomePage) {
+        // Already on home page, just scroll
         const element = document.querySelector('#contact');
         if (element) {
           const headerOffset = 80;
@@ -124,7 +124,30 @@ export const Header: React.FC = () => {
             behavior: 'smooth'
           });
         }
-      }, 300);
+      } else {
+        // Navigate to home first
+        window.location.hash = '';
+
+        // Wait for navigation then scroll
+        setTimeout(() => {
+          try {
+            const element = document.querySelector('#contact');
+            if (element) {
+              const headerOffset = 80;
+              const elementPosition = element.getBoundingClientRect().top;
+              const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
+              window.scrollTo({
+                top: offsetPosition,
+                behavior: 'smooth'
+              });
+            }
+          } catch (e) {
+            console.error("Contact scroll error:", e);
+          }
+        }, 300);
+      }
+    } catch (error) {
+      console.error("Contact navigation error:", error);
     }
   };
 
@@ -173,6 +196,7 @@ export const Header: React.FC = () => {
 
   return (
     <>
+      {/* z-50 ensures nav stays above Hero and all sections so About, Services, etc. remain clickable */}
       <header
         className="fixed top-0 left-0 z-50 w-full bg-black/90 backdrop-blur-md transition-all duration-300 py-4"
       >
@@ -192,6 +216,8 @@ export const Header: React.FC = () => {
                 src="https://jqszlmcwearhovsjknat.supabase.co/storage/v1/object/public/avatars/freepik__a-white-abstract-cube-logo-is-centered-on-a-black-__84990.png"
                 alt="LYHOENG-DESIGN Logo"
                 className="w-8 h-8 object-contain rounded-md"
+                loading="eager"
+                decoding="async"
               />
               <span>LYHOENG-DESIGN</span>
             </a>

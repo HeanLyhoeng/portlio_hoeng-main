@@ -165,6 +165,8 @@ export const SoftwareSales: React.FC<{ onBack: () => void }> = ({ onBack }) => {
                         src={product.imageUrl}
                         alt={product.name}
                         className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+                        loading="lazy"
+                        decoding="async"
                         onError={(e) => {
                           const target = e.target as HTMLImageElement;
                           target.src = 'data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" width="400" height="400"%3E%3Crect fill="%231a1a2e" width="400" height="400"/%3E%3Ctext fill="%2394a3b8" font-family="sans-serif" font-size="20" x="50%25" y="50%25" text-anchor="middle" dy=".3em"%3EProduct Image%3C/text%3E%3C/svg%3E';
@@ -269,6 +271,8 @@ export const SoftwareSales: React.FC<{ onBack: () => void }> = ({ onBack }) => {
                         src={selectedProduct.imageUrl}
                         alt={selectedProduct.name}
                         className="w-full h-full object-cover"
+                        loading="lazy"
+                        decoding="async"
                         onError={(e) => {
                           const target = e.target as HTMLImageElement;
                           target.src = 'data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" width="400" height="400"%3E%3Crect fill="%23000000" width="400" height="400"/%3E%3Ctext fill="%23ffffff" font-family="sans-serif" font-size="20" x="50%25" y="50%25" text-anchor="middle" dy=".3em"%3EProduct Image%3C/text%3E%3C/svg%3E';

@@ -2,13 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { ArrowLeft } from 'lucide-react';
 import { AboutThumnails } from './AboutThumnails';
-
-// Placeholder Footer
-const Footer = () => (
-  <footer className="py-8 text-center text-slate-500 border-t border-white/10 mt-12">
-    <div className="container mx-auto px-4">Thanks You . For Watching Good Luck 🙏</div>
-  </footer>
-);
+import { Footer } from './Footer';
 
 export const AboutUs: React.FC<{ onBack: () => void }> = ({ onBack }) => {
 
@@ -102,6 +96,7 @@ export const AboutUs: React.FC<{ onBack: () => void }> = ({ onBack }) => {
                 alt={image.alt}
                 className="about-image-carousel-img special-img"
                 loading="eager"
+                decoding="async"
                 onError={(e) => { (e.target as HTMLImageElement).src = `https://picsum.photos/1583/300?random=${image.id}`; }}
               />
             </div>
@@ -574,6 +569,8 @@ export const AboutUs: React.FC<{ onBack: () => void }> = ({ onBack }) => {
                     src={resolveSrc(member.image)}
                     alt={member.name}
                     className="w-full aspect-[2/3] object-cover"
+                    loading="lazy"
+                    decoding="async"
                     onError={(e) => { (e.target as HTMLImageElement).src = 'https://picsum.photos/seed/avatar/400/600'; }}
                   />
                 ) : (
@@ -682,6 +679,8 @@ export const AboutUs: React.FC<{ onBack: () => void }> = ({ onBack }) => {
                       src={resolveSrc(outcome.logo)}
                       alt={`${outcome.name} logo`}
                       className="h-16 w-auto object-contain"
+                      loading="lazy"
+                      decoding="async"
                       onError={(e) => { (e.target as HTMLImageElement).src = `https://picsum.photos/seed/${outcome.name}-z/120/120`; }}
                     />
                   </div>

@@ -34,15 +34,15 @@ export const CategoryRow: React.FC<CategoryRowProps> = ({ title, projects, isLan
 
     const isLongContent = projects.length > 5;
 
-    // JS Animation & Drag Refs
+    // JS Animation & Drag Refs (no state during drag to avoid re-render storms)
     const containerRef = useRef<HTMLDivElement>(null);
     const contentRef = useRef<HTMLDivElement>(null);
-    const xPos = useRef(0);
-    const reqId = useRef<number | null>(null);
     const isDragging = useRef(false);
     const [isDown, setIsDown] = useState(false);
     const startX = useRef(0);
     const startScrollLeft = useRef(0);
+    const dragRafId = useRef<number | null>(null);
+    const pendingScroll = useRef<number | null>(null);
 
 
     // Duplicate projects for seamless loop if content is long
@@ -96,9 +96,6 @@ export const CategoryRow: React.FC<CategoryRowProps> = ({ title, projects, isLan
             }
 
             animationFrameId = requestAnimationFrame(animate);
-
-
-            animationFrameId = requestAnimationFrame(animate);
         };
 
         animationFrameId = requestAnimationFrame(animate);
@@ -125,16 +122,18 @@ export const CategoryRow: React.FC<CategoryRowProps> = ({ title, projects, isLan
         e.preventDefault();
 
         const x = e.pageX - (contentRef.current?.offsetLeft || 0);
-        const walk = (x - startX.current) * 2; // Scroll-fast (2x speed)
+        const walk = (x - startX.current) * 2;
+        if (Math.abs(walk) > 5) isDragging.current = true;
 
-        if (contentRef.current) {
-            contentRef.current.scrollLeft = startScrollLeft.current - walk;
-        }
-
-        // Check if moved significantly to flag as drag
-        if (Math.abs(walk) > 5) {
-            isDragging.current = true;
-        }
+        // Throttle scroll updates via rAF (one DOM update per frame max)
+        pendingScroll.current = startScrollLeft.current - walk;
+        if (dragRafId.current !== null) return;
+        dragRafId.current = requestAnimationFrame(() => {
+            dragRafId.current = null;
+            if (contentRef.current && pendingScroll.current !== null) {
+                contentRef.current.scrollLeft = pendingScroll.current;
+            }
+        });
     };
 
 
@@ -142,17 +141,23 @@ export const CategoryRow: React.FC<CategoryRowProps> = ({ title, projects, isLan
     const handleMouseUp = () => {
         setIsDown(false);
         if (containerRef.current) containerRef.current.style.cursor = 'grab';
-
-        // Reset dragging state after a short delay to allow onClick to check it
-        setTimeout(() => {
-            isDragging.current = false;
-        }, 50);
+        if (dragRafId.current !== null) {
+            cancelAnimationFrame(dragRafId.current);
+            dragRafId.current = null;
+        }
+        pendingScroll.current = null;
+        setTimeout(() => { isDragging.current = false; }, 50);
     };
 
 
     const handleMouseLeave = () => {
         setIsDown(false);
         if (containerRef.current) containerRef.current.style.cursor = 'grab';
+        if (dragRafId.current !== null) {
+            cancelAnimationFrame(dragRafId.current);
+            dragRafId.current = null;
+        }
+        pendingScroll.current = null;
         isDragging.current = false;
     };
 

@@ -295,6 +295,7 @@ export const FullGallery: React.FC<FullGalleryProps> = ({ onBack }) => {
                           alt={p.title}
                           className="w-full h-auto block"
                           loading="lazy"
+                          decoding="async"
                         />
                         <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col justify-end p-4 md:p-6">
                           <span className="text-[10px] md:text-xs font-bold text-neon-primary uppercase tracking-wider mb-1 md:mb-2">
@@ -336,6 +337,7 @@ export const FullGallery: React.FC<FullGalleryProps> = ({ onBack }) => {
                           alt={p.title}
                           className="w-full h-auto block"
                           loading="lazy"
+                          decoding="async"
                         />
                         <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col justify-end p-4 md:p-6">
                           <span className="text-[10px] md:text-xs font-bold text-neon-primary uppercase tracking-wider mb-1 md:mb-2">
@@ -377,6 +379,7 @@ export const FullGallery: React.FC<FullGalleryProps> = ({ onBack }) => {
                           alt={p.title}
                           className="w-full h-auto block"
                           loading="lazy"
+                          decoding="async"
                         />
                         <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col justify-end p-4 md:p-6">
                           <span className="text-[10px] md:text-xs font-bold text-neon-primary uppercase tracking-wider mb-1 md:mb-2">
@@ -418,6 +421,7 @@ export const FullGallery: React.FC<FullGalleryProps> = ({ onBack }) => {
                           alt={p.title}
                           className="w-full h-auto block"
                           loading="lazy"
+                          decoding="async"
                         />
                         <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col justify-end p-4 md:p-6">
                           <span className="text-[10px] md:text-xs font-bold text-neon-primary uppercase tracking-wider mb-1 md:mb-2">

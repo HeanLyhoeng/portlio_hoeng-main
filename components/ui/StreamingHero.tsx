@@ -97,6 +97,8 @@ export const StreamingHero: React.FC<StreamingHeroProps> = ({ heroItems, minimal
                                 src={currentItem.image_url || 'https://placehold.co/1920x1080/1a1a1a/white?text=No+Image'}
                                 alt={currentItem.title}
                                 className="w-full h-full object-cover object-center"
+                                loading="lazy"
+                                decoding="async"
                             />
                         )}
                         {/* Gradient Overlay */}

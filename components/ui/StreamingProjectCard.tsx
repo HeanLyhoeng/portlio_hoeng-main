@@ -45,13 +45,13 @@ export const StreamingProjectCard: React.FC<StreamingProjectCardProps> = ({ proj
         }`}>
 
 
+        {/* Prefer thumbnail URLs from Supabase when available to avoid loading full-res in gallery */}
         <img
           src={project.image}
           alt={project.title}
           className={`h-full object-contain transition-opacity duration-300 group-hover:opacity-60 pointer-events-none ${variableWidth ? 'w-auto max-w-none' : 'w-full object-cover'}`}
-
-
           loading="lazy"
+          decoding="async"
         />
 
 

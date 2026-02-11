@@ -57,6 +57,8 @@ export const Hero: React.FC<HeroProps> = ({ activeMenu = 'home' }) => {
           src="https://jqszlmcwearhovsjknat.supabase.co/storage/v1/object/public/avatars/freepik__a-highangle-shot-captures-a-young-man-with-tousled__61066.jpeg"
           alt="Atmosphere"
           className="w-full h-full object-cover blur-sm opacity-50"
+          loading="eager"
+          decoding="async"
         />
         {/* Dark Gradient Overlay for text readability */}
         <div className="absolute inset-0 bg-gradient-to-r from-black via-black/70 to-transparent" />
@@ -138,10 +140,11 @@ export const Hero: React.FC<HeroProps> = ({ activeMenu = 'home' }) => {
       <div className="hidden lg:block absolute bottom-0 right-0 z-20 h-[90%] w-auto pointer-events-none">
         {/* REPLACE THIS SRC WITH YOUR TRANSPARENT PNG */}
         <img
-          src=""
+          src="https://jqszlmcwearhovsjknat.supabase.co/storage/v1/object/public/avatars/PNG.png"
           alt="Portrait"
           className="h-auto max-h-[80vh] w-auto object-contain object-bottom drop-shadow-2xl"
-          // Note: In real production, this needs to be a transparent PNG.
+          loading="lazy"
+          decoding="async"
           style={{
             maskImage: 'linear-gradient(to bottom, black 80%, transparent 100%)',
             WebkitMaskImage: 'linear-gradient(to bottom, black 80%, transparent 100%)'
