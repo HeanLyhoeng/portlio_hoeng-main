@@ -1,0 +1,1591 @@
+    @keyframes caseStudyCardEntrance {
+      0% {
+        opacity: 0;
+        transform: scale(0.8) translateZ(0);
+        filter: blur(6px);
+      }
+
+      100% {
+        opacity: 1;
+        transform: scale(1) translateZ(0);
+        filter: blur(0);
+      }
+    }
+
+    @keyframes caseStudyCardHover {
+      0% {
+        transform: scale(1) translateY(0);
+        box-shadow: 0 0 0 rgba(0, 243, 255, 0);
+      }
+
+      100% {
+        transform: scale(1.08) translateY(-15px);
+        box-shadow: 0 25px 60px rgba(0, 0, 0, 0.6),
+          0 0 120px rgba(0, 0, 0, 0.4),
+          inset 0 0 100px rgba(0, 243, 255, 0.2);
+      }
+    }
+
+    .case-study-card-item {
+      animation: caseStudyCardEntrance 1.6s ease-out forwards;
+    }
+
+    .case-study-card-item:hover {
+      animation: caseStudyCardHover 0.9s ease-out forwards;
+    }
+
+    .case-study-card-item:hover::before {
+      opacity: 1;
+      transform: scale(1.3);
+      background: radial-gradient(circle at center, rgba(0, 243, 255, 0.4) 0%, rgba(0, 243, 255, 0.2) 40%, transparent 100%);
+    }
+
+    /* 7. FAQ CARDS - Accordion Slide with Breathing Glow */
+    @keyframes faqCardEntrance {
+      0% {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+
+      100% {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    /* ============================================
+    1. RESET & BASE STYLES
+    ============================================ */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    :root {
+      --bg: #000000;
+      --text: #ffffff;
+      --muted: #888888;
+      --accent: #000000;
+      --spacing-lg: 100px;
+      --spacing-md: 40px;
+    }
+
+    body {
+      font-family: "Helvetica Neue", Arial, sans-serif;
+      background-color: #000000 !important;
+      color: #ffffff;
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* ============================================
+     2. PROJECT GALLERY (The Main Grid)
+     ============================================ */
+    .container {
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 80px 40px;
+    }
+
+    .image-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      column-gap: var(--spacing-md);
+      row-gap: var(--spacing-lg);
+    }
+
+    .image-card {
+      display: flex;
+      flex-direction: column;
+      text-decoration: none;
+      color: inherit;
+      animation: pbFadeUp 1.2s cubic-bezier(0.22, 1, 0.36, 1) both;
+    }
+
+    .image-card img {
+      width: 100%;
+      height: auto;
+      display: block;
+      object-fit: cover;
+      transition: transform 0.8s cubic-bezier(0.25, 1, 0.5, 1);
+    }
+
+    .image-card:hover img {
+      transform: scale(1.02);
+    }
+
+    .caption {
+      margin-top: 25px;
+    }
+
+    .caption h3 {
+      font-size: 13px;
+      font-weight: 700;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      margin-bottom: 8px;
+    }
+
+    .caption p {
+      font-size: 12px;
+      color: var(--muted);
+      margin-bottom: 12px;
+    }
+
+    .caption a {
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-decoration: none;
+      color: #000;
+      border-bottom: 1px solid #000;
+      padding-bottom: 2px;
+      text-transform: uppercase;
+    }
+
+    /* ============================================
+     3. INDIVIDUAL PROJECT VIEW (Fix for /project/ID)
+     Apply this style to your Project Detail pages
+     ============================================ */
+    .project-detail-view {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 100px 40px;
+      animation: pbFadeUp 1s ease-out;
+    }
+
+    .project-header {
+      margin-bottom: 60px;
+      border-bottom: 1px solid #eee;
+      padding-bottom: 40px;
+    }
+
+    .project-header h1 {
+      font-size: 24px;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      margin-bottom: 15px;
+    }
+
+    .project-meta {
+      display: flex;
+      gap: 40px;
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--muted);
+    }
+
+    .project-content img {
+      width: 100%;
+      margin-bottom: 40px;
+      display: block;
+    }
+
+    .project-description {
+      max-width: 800px;
+      font-size: 16px;
+      line-height: 1.8;
+      margin: 40px 0;
+      color: #333;
+    }
+
+    /* ============================================
+     4. ANIMATIONS & UI ELEMENTS
+     ============================================ */
+    @keyframes pbFadeUp {
+      from {
+        opacity: 0;
+        transform: translateY(30px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    /* Remove old Neon/Glow styles to keep it clean */
+    .glow-on-hover-blue::before,
+    .service-card-item::before {
+      display: none !important;
+    }
+
+    /* ============================================
+     PRICING CARDS - Subtle Auto Animation
+     Adds a slow floating motion to pricing cards with a staggered delay
+     ============================================ */
+    @keyframes pricingFloat {
+      0% {
+        transform: translateY(0);
+      }
+
+      50% {
+        transform: translateY(-8px);
+      }
+
+      100% {
+        transform: translateY(0);
+      }
+    }
+
+    .pricing-card-item.auto-animate {
+      /* small, subtle float; will be staggered via inline style animationDelay */
+      animation: pricingFloat 6s ease-in-out infinite;
+    }
+
+    .pricing-card-item.auto-animate:hover {
+      /* pause float on hover for stability */
+      animation-play-state: paused;
+      transform: translateY(-4px);
+    }
+
+    /* Responsive */
+    @media (max-width: 900px) {
+      .image-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .project-meta {
+        flex-direction: column;
+        gap: 10px;
+      }
+    }
+
+    .awards-table-container:hover::before {
+      opacity: 0.8;
+    }
+
+    @keyframes awardsTableEntrance {
+      0% {
+        opacity: 0;
+        transform: scale(0.95);
+      }
+
+      100% {
+        opacity: 1;
+        transform: scale(1);
+      }
+    }
+
+    .awards-table-container {
+      animation: awardsTableEntrance 1.8s ease-out forwards;
+    }
+
+    @keyframes awardsRowEntrance {
+      0% {
+        opacity: 0;
+        transform: translateX(-30px);
+      }
+
+      100% {
+        opacity: 1;
+        transform: translateX(0);
+      }
+    }
+
+    .awards-table-row {
+      animation: awardsRowEntrance 0.8s ease-out forwards;
+    }
+
+    @keyframes awardsRowHover {
+      0% {
+        background-color: transparent;
+        border-left: 0 solid rgba(0, 243, 255, 0);
+      }
+
+      100% {
+        background-color: rgba(0, 243, 255, 0.05);
+        border-left: 3px solid rgba(0, 243, 255, 0.6);
+        box-shadow: inset 0 0 20px rgba(0, 243, 255, 0.2);
+      }
+    }
+
+    .awards-table-row:hover {
+      animation: awardsRowHover 0.5s ease-out forwards;
+    }
+
+    /* Outcome Cards - Zoom & Fade with Glow */
+    .outcome-card {
+      position: relative;
+      overflow: hidden;
+    }
+
+    .outcome-card::before {
+      content: '';
+      position: absolute;
+      inset: -2px;
+      background: radial-gradient(circle at center, rgba(255, 0, 0, 0.2) 0%, rgba(0, 243, 255, 0.05) 50%, transparent 100%);
+      opacity: 0.6;
+      transition: opacity 1.6s ease, transform 1.6s ease;
+      pointer-events: none;
+      z-index: 0;
+      border-radius: inherit;
+    }
+
+    .outcome-card>* {
+      position: relative;
+      z-index: 1;
+    }
+
+    @keyframes outcomeCardEntrance {
+      0% {
+        opacity: 0;
+        transform: scale(0.7) translateZ(-100px);
+        filter: blur(8px);
+      }
+
+      100% {
+        opacity: 1;
+        transform: scale(1) translateZ(0);
+        filter: blur(0);
+      }
+    }
+
+    .outcome-card {
+      animation: outcomeCardEntrance 1.6s ease-out forwards;
+    }
+
+    @keyframes outcomeCardHover {
+      0% {
+        transform: scale(1) translateY(0);
+        box-shadow: 0 0 0 rgba(0, 243, 255, 0);
+      }
+
+      100% {
+        transform: scale(1.06) translateY(-12px);
+        box-shadow: 0 20px 50px rgba(255, 255, 255, 0.826),
+          0 0 100px rgb(248, 246, 246),
+          inset 0 0 80px rgb(255, 255, 255);
+      }
+    }
+
+    .outcome-card:hover {
+      animation: outcomeCardHover 0.8s ease-out forwards;
+    }
+
+    .outcome-card:hover::before {
+      opacity: 1;
+      transform: scale(1.3);
+    }
+
+    /* Final CTA Card - Pulse & Expand */
+    .final-cta-card {
+      position: relative;
+      overflow: hidden;
+    }
+
+    .final-cta-card::before {
+      content: '';
+      position: absolute;
+      inset: -2px;
+      background: radial-gradient(circle at center, rgba(0, 243, 255, 0.25) 0%, rgba(0, 243, 255, 0.1) 50%, transparent 100%);
+      opacity: 0.7;
+      transition: opacity 1.6s ease, transform 1.6s ease;
+      pointer-events: none;
+      z-index: 0;
+      border-radius: inherit;
+    }
+
+    .final-cta-card>* {
+      position: relative;
+      z-index: 1;
+    }
+
+    @keyframes finalCtaEntrance {
+      0% {
+        opacity: 0;
+        transform: scale(0.85);
+      }
+
+      50% {
+        transform: scale(1.05);
+      }
+
+      100% {
+        opacity: 1;
+        transform: scale(1);
+      }
+    }
+
+    .final-cta-card {
+      animation: finalCtaEntrance 2.0s ease-out forwards;
+    }
+
+    @keyframes finalCtaHover {
+      0% {
+        transform: scale(1);
+        box-shadow: 0 0 0 rgba(0, 243, 255, 0);
+      }
+
+      50% {
+        transform: scale(1.03);
+        box-shadow: 0 0 40px rgba(0, 243, 255, 0.7),
+          0 0 80px rgba(0, 243, 255, 0.5);
+      }
+
+      100% {
+        transform: scale(1.02);
+        box-shadow: 0 0 30px rgba(0, 243, 255, 0.6),
+          0 0 60px rgba(0, 243, 255, 0.4);
+      }
+    }
+
+    .final-cta-card:hover {
+      animation: finalCtaHover 0.9s ease-out forwards;
+    }
+
+    .final-cta-card:hover::before {
+      opacity: 1;
+      transform: scale(1.2);
+      animation: pulseGlow 2s ease-in-out infinite;
+    }
+
+    /* ============================================
+   ABOUT US PAGE - UNIQUE ANIMATIONS
+   ============================================ */
+
+    /* 1. ABOUT HERO CARD - Fade In with Scale Pulse */
+    .about-hero-card {
+      position: relative;
+      padding: 2rem;
+      border-radius: 1rem;
+    }
+
+    .about-hero-card::before {
+      content: '';
+      position: absolute;
+      inset: -2px;
+      background: radial-gradient(circle at center, rgba(255, 255, 255, 0.15) 0%, transparent 70%);
+      opacity: 0.5;
+      transition: opacity 1.6s ease, transform 1.6s ease;
+      pointer-events: none;
+      z-index: 0;
+      border-radius: inherit;
+    }
+
+    .about-hero-card>* {
+      position: relative;
+      z-index: 1;
+    }
+
+    @keyframes aboutHeroEntrance {
+      0% {
+        opacity: 0;
+        transform: scale(0.9);
+      }
+
+      50% {
+        transform: scale(1.02);
+      }
+
+      100% {
+        opacity: 1;
+        transform: scale(1);
+      }
+    }
+
+    .about-hero-card {
+      animation: aboutHeroEntrance 3.6s ease-out forwards;
+    }
+
+    @keyframes aboutHeroHover {
+      0% {
+        transform: scale(1);
+      }
+
+      100% {
+        transform: scale(1.01);
+        box-shadow: 0 0 40px #FF5F1F;
+      }
+    }
+
+    .about-hero-card:hover {
+      animation: aboutHeroHover 1.2s ease-out forwards;
+    }
+
+    .about-hero-card:hover::before {
+      opacity: 0.8;
+      transform: scale(1.05);
+    }
+
+    /* 2. ABOUT TEAM CARDS - Flip & Slide */
+    .about-team-card {
+      position: relative;
+      overflow: hidden;
+    }
+
+    .about-team-card::before {
+      content: '';
+      position: absolute;
+      inset: -2px;
+      background: radial-gradient(circle at center, rgba(0, 0, 0, 0.2) 0%, transparent 70%);
+      opacity: 0.5;
+      transition: opacity 1.6s ease, transform 1.6s ease;
+      pointer-events: none;
+      z-index: 0;
+      border-radius: inherit;
+    }
+
+    .about-team-card>* {
+      position: relative;
+      z-index: 1;
+    }
+
+    @keyframes aboutTeamEntrance {
+      0% {
+        opacity: 0;
+        transform: perspective(800px) rotateY(90deg) translateX(-30px);
+      }
+
+      100% {
+        opacity: 1;
+        transform: perspective(800px) rotateY(0deg) translateX(0);
+      }
+    }
+
+    .about-team-card {
+      animation: aboutTeamEntrance 3.0s ease-out forwards;
+    }
+
+    @keyframes aboutTeamHover {
+      0% {
+        transform: translateY(0) rotateY(0deg);
+        box-shadow: 0 0 0 #00f3ff00;
+      }
+
+      100% {
+        transform: translateY(-8px) rotateY(5deg);
+        box-shadow: 0 12px 30px #FF5F1F,
+          0 0 60px rgba(0, 0, 0, 0.3);
+      }
+    }
+
+    .about-team-card:hover {
+      animation: aboutTeamHover 1.4s ease-out forwards;
+    }
+
+    .about-team-card:hover::before {
+      opacity: 1;
+      transform: scale(1.2) rotate(5deg);
+    }
+
+    /* 3. ABOUT AWARDS TABLE - Slide Down & Reveal */
+    .about-awards-container {
+      position: relative;
+      overflow: hidden;
+    }
+
+    .about-awards-container::before {
+      content: '';
+      position: absolute;
+      inset: -2px;
+      background: radial-gradient(circle at center, rgba(0, 243, 255, 0.12) 0%, transparent 70%);
+      opacity: 0.4;
+      transition: opacity 1.6s ease;
+      pointer-events: none;
+      z-index: 0;
+      border-radius: inherit;
+    }
+
+    .about-awards-container:hover::before {
+      opacity: 0.8;
+    }
+
+    @keyframes aboutAwardsEntrance {
+      0% {
+        opacity: 0;
+        transform: translateY(-30px) scale(0.95);
+        clip-path: inset(100% 0 0 0);
+      }
+
+      100% {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+        clip-path: inset(0 0 0 0);
+      }
+    }
+
+    .about-awards-container {
+      animation: aboutAwardsEntrance 3.2s ease-out forwards;
+    }
+
+    @keyframes aboutAwardsRowEntrance {
+      0% {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+
+      100% {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .about-awards-row {
+      animation: aboutAwardsRowEntrance 1.8s ease-out forwards;
+    }
+
+    @keyframes aboutAwardsRowHover {
+      0% {
+        background-color: transparent;
+        border-left: 0 solid rgba(0, 243, 255, 0);
+        transform: translateX(0);
+      }
+
+      100% {
+        background-color: rgba(0, 243, 255, 0.08);
+        border-left: 4px solid #00f3ffb3;
+        transform: translateX(5px);
+        box-shadow: inset 0 0 25px rgba(0, 243, 255, 0.25);
+      }
+    }
+
+    .about-awards-row:hover {
+      animation: aboutAwardsRowHover 1.0s ease-out forwards;
+    }
+
+    /* 4. ABOUT OUTCOME CARDS - Rotate & Zoom */
+    .about-outcome-card {
+      position: relative;
+      overflow: hidden;
+    }
+
+    .about-outcome-card::before {
+      content: '';
+      position: absolute;
+      inset: -2px;
+      background: radial-gradient(circle at center, rgba(0, 243, 255, 0.22) 0%, rgba(0, 243, 255, 0.08) 50%, transparent 100%);
+      opacity: 0.6;
+      transition: opacity 1.6s ease, transform 1.6s ease;
+      pointer-events: none;
+      z-index: 0;
+      border-radius: inherit;
+    }
+
+    .about-outcome-card>* {
+      position: relative;
+      z-index: 1;
+    }
+
+    @keyframes aboutOutcomeEntrance {
+      0% {
+        opacity: 0;
+        transform: rotate(-5deg) scale(0.9) translateZ(-50px);
+        filter: blur(4px);
+      }
+
+      50% {
+        transform: rotate(2deg) scale(1.05) translateZ(0);
+      }
+
+      100% {
+        opacity: 1;
+        transform: rotate(0deg) scale(1) translateZ(0);
+        filter: blur(0);
+      }
+    }
+
+    .about-outcome-card {
+      animation: aboutOutcomeEntrance 3.4s ease-out forwards;
+    }
+
+    @keyframes aboutOutcomeHover {
+      0% {
+        transform: scale(1) translateY(0);
+        box-shadow: 0 0 0 rgba(0, 243, 255, 0);
+      }
+
+      100% {
+        transform: scale(1.05) translateY(-8px);
+        box-shadow: 0 15px 40px rgba(0, 243, 255, 0.3),
+          0 0 80px rgba(0, 243, 255, 0.2);
+      }
+    }
+
+    .about-outcome-card:hover {
+      animation: aboutOutcomeHover 1.6s ease-out forwards;
+    }
+
+    .about-outcome-card:hover::before {
+      opacity: 1;
+      transform: scale(1.25) rotate(10deg);
+    }
+
+    /* 5. ABOUT TESTIMONIAL CARD - Fade & Expand */
+    .about-testimonial-card {
+      position: relative;
+      overflow: hidden;
+    }
+
+    .about-testimonial-card::before {
+      content: '';
+      position: absolute;
+      inset: -2px;
+      background: radial-gradient(circle at center, rgba(0, 243, 255, 0.18) 0%, rgba(0, 243, 255, 0.06) 50%, transparent 100%);
+      opacity: 0.6;
+      transition: opacity 1.6s ease, transform 1.6s ease;
+      pointer-events: none;
+      z-index: 0;
+      border-radius: inherit;
+    }
+
+    .about-testimonial-card>* {
+      position: relative;
+      z-index: 1;
+    }
+
+    @keyframes aboutTestimonialEntrance {
+      0% {
+        opacity: 0;
+        transform: scale(0.92);
+        border-radius: 50%;
+      }
+
+      50% {
+        transform: scale(1.03);
+      }
+
+      100% {
+        opacity: 1;
+        transform: scale(1);
+        border-radius: 1rem;
+      }
+    }
+
+    .about-testimonial-card {
+      animation: aboutTestimonialEntrance 4.0s ease-out forwards;
+    }
+
+    @keyframes aboutTestimonialHover {
+      0% {
+        transform: scale(1);
+        box-shadow: 0 0 0 rgba(0, 243, 255, 0);
+      }
+
+      50% {
+        transform: scale(1.02);
+        box-shadow: 0 0 35px rgba(0, 0, 0, 0.7),
+          0 0 70px rgb(0, 0, 0);
+      }
+
+      100% {
+        transform: scale(1.01);
+        box-shadow: 0 0 25px rgb(0, 0, 0),
+          0 0 50px rgb(0, 0, 0),
+          inset 0 0 60px rgba(0, 243, 255, 0.15);
+      }
+    }
+
+    .about-testimonial-card:hover {
+      animation: aboutTestimonialHover 1.8s ease-out forwards;
+    }
+
+    .about-testimonial-card:hover::before {
+      opacity: 1;
+      transform: scale(1.18);
+      animation: testimonialGlowPulse 2.5s ease-in-out infinite;
+    }
+
+    @keyframes testimonialGlowPulse {
+
+      0%,
+      100% {
+        opacity: 0.9;
+        transform: scale(1.18);
+      }
+
+      50% {
+        opacity: 1;
+        transform: scale(1.25);
+      }
+    }
+
+    /* Testimonial Slider Styles */
+    .testimonial-wrapper {
+      font-family: 'Roboto', sans-serif;
+      width: 100%;
+      min-height: 400px;
+      position: relative;
+      margin: 40px 0;
+    }
+
+    .testimonial-cover,
+    .testimonial-slider {
+      position: absolute;
+    }
+
+    .testimonial-cover {
+      width: 100%;
+      height: 100%;
+      background: rgba(15, 23, 42, 0.95);
+      border-radius: 1rem;
+      overflow: hidden;
+    }
+
+    .testimonial-slider {
+      display: flex;
+      height: 100%;
+      width: 500%;
+      transition: transform 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+      will-change: transform;
+    }
+
+    .testimonial-card-item {
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      width: 20%;
+      flex-shrink: 0;
+    }
+
+    /* About Us Image Carousel Styles - Responsive Dimensions */
+    /* Web Browser: 1024px to 2500px width, 3:1 aspect ratio, 72 ppi */
+    /* Mobile: Minimum 800px width, 4:3 aspect ratio, 72 ppi */
+    .about-image-carousel-wrapper {
+      font-family: 'Roboto', sans-serif;
+      width: 100%;
+      max-width: 2500px;
+      /* Max width for web browser */
+      min-height: 400px;
+      /* Minimum height to prevent collapse */
+      height: auto;
+      aspect-ratio: 3 / 1;
+      /* 3:1 aspect ratio for web - guides container but images maintain original */
+      position: relative;
+      margin: 0 auto;
+      overflow: hidden;
+    }
+
+    /* Ensure minimum width on larger screens */
+    @media (min-width: 1024px) {
+      .about-image-carousel-wrapper {
+        min-width: 1024px;
+      }
+    }
+
+    .about-image-carousel-cover {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      background: #000;
+      overflow: hidden;
+      /* Ensure cover is visible and images can be seen */
+      z-index: 1;
+    }
+
+    /* Continuous horizontal scrolling marquee animation */
+    /* Each image visible for 4 seconds as it scrolls through viewport */
+    /* Total animation: 20 images × 4 seconds = 80 seconds for one complete cycle */
+    @keyframes marqueeScroll {
+      0% {
+        transform: translateX(0);
+      }
+
+      100% {
+        transform: translateX(-50%);
+        /* Move by exactly half (first set of images) for seamless loop */
+      }
+    }
+
+    .about-image-carousel-slider {
+      position: absolute;
+      display: flex;
+      flex-direction: row;
+      height: 100%;
+      width: calc(100% * 40);
+      /* 40 images total (20 original + 20 duplicated) */
+      left: 0;
+      top: 0;
+      /* Continuous scrolling animation - 80 seconds for full cycle (4 seconds per image) */
+      animation: marqueeScroll 80s linear infinite;
+      will-change: transform;
+      /* Ensure slider is above cover background */
+      z-index: 2;
+      background: transparent;
+    }
+
+    /* Continuous bouncing/jumping animation for carousel images */
+    /* Animation runs continuously while each image is displayed for 4 seconds */
+    @keyframes imageBounce {
+
+      0%,
+      100% {
+        transform: translateY(0) translateZ(0);
+      }
+
+      50% {
+        transform: translateY(-15px) translateZ(0);
+      }
+    }
+
+    /* Alternative bounce - more noticeable jump */
+    @keyframes imageBounceStrong {
+
+      0%,
+      100% {
+        transform: translateY(0) scale(1) translateZ(0);
+      }
+
+      25% {
+        transform: translateY(-20px) scale(1.02) translateZ(0);
+      }
+
+      50% {
+        transform: translateY(-10px) scale(1) translateZ(0);
+      }
+
+      75% {
+        transform: translateY(-20px) scale(1.02) translateZ(0);
+      }
+    }
+
+    .about-image-carousel-item {
+      position: relative;
+      width: calc(100% / 20);
+      /* Each image takes 1/20th of the slider width */
+      height: 100%;
+      flex-shrink: 0;
+      flex-grow: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0 10px;
+      /* Small gap between images */
+    }
+
+    .about-image-carousel-img {
+      position: relative;
+      width: 100%;
+      height: 100%;
+      min-width: 0;
+      max-width: 100%;
+      object-fit: contain;
+      /* Show full image without cropping - maintains original aspect ratio */
+      object-position: center;
+      display: block;
+      /* Optimize image rendering for sharpness - use auto for photos */
+      image-rendering: auto;
+      -ms-interpolation-mode: bicubic;
+      /* Better interpolation for photos */
+      /* Hardware acceleration for better performance and sharpness */
+      backface-visibility: hidden;
+      -webkit-backface-visibility: hidden;
+      /* Continuous bouncing/jumping animation - runs while image is displayed for 4 seconds */
+      animation: imageBounceStrong 1.2s ease-in-out infinite;
+      will-change: transform;
+    }
+
+    /* Mobile View - 4:3 aspect ratio, minimum 800px width */
+    @media (max-width: 1023px) {
+      .about-image-carousel-wrapper {
+        min-width: 800px;
+        max-width: 100%;
+        width: 100%;
+        aspect-ratio: 4 / 3;
+        /* 4:3 aspect ratio for mobile - guides container but images maintain original */
+        min-height: 600px;
+        /* Minimum height for mobile */
+      }
+
+      .about-image-carousel-slider {
+        width: calc(100% * 40);
+        /* 40 images total (20 original + 20 duplicated) */
+        animation: marqueeScroll 80s linear infinite;
+        /* Same animation on mobile */
+      }
+
+      .about-image-carousel-item {
+        width: calc(100% / 20);
+        /* Each image takes 1/20th of the slider width */
+      }
+
+      .about-image-carousel-img {
+        width: 100%;
+        height: 100%;
+        object-fit: contain;
+        /* Show full image without cropping on mobile too */
+        animation: imageBounceStrong 1.2s ease-in-out infinite;
+        /* Continuous bounce on mobile too */
+      }
+    }
+
+    /* Small Mobile - Optimized for performance */
+    @media (max-width: 768px) {
+      .about-image-carousel-wrapper {
+        min-width: 100%;
+        width: 100%;
+        aspect-ratio: 4 / 3;
+      }
+    }
+
+    /* Very Small Mobile - 1:1 or 4:5 ratio options */
+    @media (max-width: 480px) {
+      .about-image-carousel-wrapper {
+        aspect-ratio: 4 / 5;
+        /* 4:5 ratio for very small mobile */
+      }
+    }
+
+    /* Respect reduced motion preference */
+    @media (prefers-reduced-motion: reduce) {
+
+      .service-card-item,
+      .industry-card-item,
+      .process-card-item,
+      .testimonial-card-item,
+      .pricing-card-item,
+      .case-study-card-item,
+      .faq-card-item,
+      .social-proof-logo,
+      .team-member-card,
+      .awards-table-container,
+      .awards-table-row,
+      .outcome-card,
+      .final-cta-card,
+      .about-hero-card,
+      .about-team-card,
+      .about-awards-container,
+      .about-awards-row,
+      .about-outcome-card,
+      .about-testimonial-card {
+        animation: none !important;
+      }
+
+      .service-card-item:hover,
+      .industry-card-item:hover,
+      .process-card-item:hover,
+      .testimonial-card-item:hover,
+      .pricing-card-item:hover,
+      .case-study-card-item:hover,
+      .faq-card-item:hover,
+      .social-proof-logo:hover,
+      .team-member-card:hover,
+      .awards-table-row:hover,
+      .outcome-card:hover,
+      .final-cta-card:hover,
+      .about-hero-card:hover,
+      .about-team-card:hover,
+      .about-awards-row:hover,
+      .about-outcome-card:hover,
+      .about-testimonial-card:hover {
+        animation: none !important;
+        transform: none !important;
+      }
+
+      .service-card-item::before,
+      .industry-card-item::before,
+      .process-card-item::before,
+      .testimonial-card-item::before,
+      .pricing-card-item::before,
+      .case-study-card-item::before,
+      .faq-card-item::before,
+      .social-proof-logo::before,
+      .team-member-card::before,
+      .awards-table-container::before,
+      .outcome-card::before,
+      .final-cta-card::before,
+      .about-hero-card::before,
+      .about-team-card::before,
+      .about-awards-container::before,
+      .about-outcome-card::before,
+      .about-testimonial-card::before {
+        opacity: 0.3 !important;
+        animation: none !important;
+      }
+    }
+
+    /* Responsive improvements */
+    @media (max-width: 640px) {
+      .container {
+        padding-left: 1rem;
+        padding-right: 1rem;
+      }
+    }
+
+    /* Smooth scroll behavior */
+    html {
+      scroll-behavior: smooth;
+    }
+
+    /* Ensure proper spacing on mobile */
+    @media (max-width: 768px) {
+      section {
+        padding-top: 3rem;
+        padding-bottom: 3rem;
+      }
+    }
+
+    /* 1. ការកំណត់ស្ទីលស៊ុមរួម (General Frame Style) */
+    .service-card-item,
+    .industry-card-item,
+    .process-card-item,
+    .testimonial-card-item,
+    .pricing-card-item,
+    .case-study-card-item,
+    .faq-card-item,
+    .team-member-card,
+    .outcome-card {
+      position: relative;
+      background: #ffffff;
+      /* ឬប្រើ background: transparent */
+      border: 1px solid rgba(0, 0, 0, 0.1);
+      /* ស៊ុមស្តើងធម្មតា */
+      border-radius: 12px;
+      padding: 20px;
+      transition: all 0.3s ease-in-out;
+      overflow: hidden;
+      box-shadow: none;
+      /* ដកស្រមោលចេញឱ្យមើលទៅសាមញ្ញ */
+    }
+
+    /* 2. ចលនាពេល Hover (Simple Hover Effect) */
+    /* ពេលដាក់ Mouse លើ វានឹងឡើងស៊ុមពណ៌ខៀវស្តើង និងងើបឡើងបន្តិច */
+    .service-card-item:hover,
+    .industry-card-item:hover,
+    .process-card-item:hover,
+    .testimonial-card-item:hover,
+    .pricing-card-item:hover,
+    .case-study-card-item:hover,
+    .faq-card-item:hover,
+    .team-member-card:hover,
+    .outcome-card:hover {
+      transform: translateY(-5px);
+      border-color: #0099ff;
+      /* ប្តូរពណ៌ស៊ុមពេល hover */
+      box-shadow: 0 10px 20px rgba(0, 0, 0, 0.05);
+      /* ស្រមោលតិចៗបំផុត */
+    }
+
+    /* 3. ដក Glow Effects (Before/After) ដែលមានកូដចាស់ៗចេញ */
+    .service-card-item::before,
+    .industry-card-item::before,
+    .process-card-item::before,
+    .testimonial-card-item::before,
+    .pricing-card-item::before,
+    .case-study-card-item::before,
+    .faq-card-item::before,
+    .team-member-card::before,
+    .outcome-card::before {
+      display: none !important;
+      /* បិទចោលនូវពន្លឺ Glow ទាំងអស់ */
+    }
+
+    /* 4. ការកំណត់សម្រាប់រូបភាព (Image Animation) */
+    img {
+      max-width: 100%;
+      height: auto;
+      transition: transform 0.5s ease;
+    }
+
+    .service-card-item:hover img {
+      transform: scale(1.05);
+      /* រូបភាពរីកធំតិចៗពេល hover */
+    }
+
+    /* 5. ការកំណត់ចលនាចូល (Entrance Animation) បែបស្រាលៗ */
+    @keyframes fadeInUp {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .service-card-item,
+    .industry-card-item,
+    .process-card-item {
+      animation: fadeInUp 0.6s ease-out forwards;
+    }
+
+    /* 6. ចលនាសម្រាប់អក្សរក្នុង Card */
+    .service-card-item>*,
+    .industry-card-item>* {
+      position: relative;
+      z-index: 2;
+    }
+
+    /* 7. ផ្នែកសម្រាប់ Testimonial Wrapper (សាមញ្ញ) */
+    .testimonial-wrapper {
+      width: 100%;
+      margin: 20px 0;
+      border: 1px solid #eee;
+      border-radius: 1rem;
+    }
+
+    /* Project gallery - two column layout similar to provided image */
+    .project-gallery.two-col {
+      width: 100%;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    .project-gallery.two-col .two-col-inner {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 24px;
+      align-items: start;
+    }
+
+    /* Each item fills column height; maintain aspect ratio */
+    .project-gallery.two-col .gallery-item {
+      background: var(--card);
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      justify-content: stretch;
+      border-radius: 0;
+      box-shadow: none;
+    }
+
+    .project-gallery.two-col .gallery-item img {
+      width: 100%;
+      height: auto;
+      display: block;
+      object-fit: cover;
+    }
+
+    /* Caption area aligned below each image */
+    .project-gallery.two-col .gallery-caption {
+      padding: 18px 12px;
+      font-size: 13px;
+      color: var(--muted);
+      background: transparent;
+    }
+
+    /* Responsive: stack on small screens */
+    @media (max-width: 900px) {
+      .project-gallery.two-col .two-col-inner {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    /* Portfoliobox-like Minimal Theme & Animations
+   - Clean, white canvas
+   - Subtle card borders, simple hover lifts
+   - Soft fade/slide entrance animations
+   ============================================ */
+
+    :root {
+      --pb-bg: #ffffff;
+      --pb-text: #111827;
+      --pb-muted: #6b7280;
+      --pb-accent: #111827;
+    }
+
+    /* Page background and typography */
+    body {
+      background: var(--bg) !important;
+      color: var(--text) !important;
+      font-family: Outfit, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+
+    /* Container centered layout */
+    .container {
+      max-width: 1100px;
+      margin-left: auto;
+      margin-right: auto;
+      padding-left: 1rem;
+      padding-right: 1rem;
+    }
+
+    /* Simple header/hero spacing */
+    header,
+    .hero {
+      padding-top: 3.5rem;
+      padding-bottom: 3.5rem;
+    }
+
+    /* Portfolio grid */
+    .portfolio-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 24px;
+      align-items: start;
+    }
+
+    /* Project / Card styling (minimal) */
+    .project-card,
+    .service-card-item,
+    .industry-card-item,
+    .process-card-item,
+    .testimonial-card-item,
+    .pricing-card-item,
+    .case-study-card-item,
+    .faq-card-item,
+    .team-member-card,
+    .outcome-card,
+    .final-cta-card,
+    .about-team-card,
+    .about-hero-card {
+      background: #fff;
+      border: 1px solid rgba(15, 23, 42, 0.06);
+      border-radius: 8px;
+      padding: 18px;
+      overflow: hidden;
+      transition: transform 320ms ease, box-shadow 320ms ease, border-color 320ms ease;
+      box-shadow: 0 6px 18px rgba(16, 24, 40, 0.04);
+    }
+
+    .project-card img,
+    .service-card-item img {
+      width: 100%;
+      height: 180px;
+      object-fit: cover;
+      display: block;
+      border-radius: 6px;
+    }
+
+    .project-card:hover,
+    .service-card-item:hover,
+    .industry-card-item:hover,
+    .process-card-item:hover {
+      transform: translateY(-8px);
+      box-shadow: 0 18px 40px rgba(16, 24, 40, 0.08);
+      border-color: rgba(16, 24, 40, 0.08);
+    }
+
+    /* Links and headings */
+    .project-card h3,
+    .service-card-item h3 {
+      margin-top: 0.75rem;
+      margin-bottom: 0.25rem;
+      color: var(--pb-accent);
+      font-weight: 600;
+      font-size: 1.05rem;
+    }
+
+    .project-card p,
+    .service-card-item p {
+      color: var(--pb-muted);
+      margin: 0;
+      font-size: 0.95rem;
+    }
+
+    /* Simple fade/slide entrance used across sections */
+    @keyframes pbFadeUp {
+      from {
+        opacity: 0;
+        transform: translateY(18px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .fade-up {
+      animation: pbFadeUp 600ms cubic-bezier(.22, .98, .35, 1) both;
+    }
+
+    /* Subtle image hover zoom used in Portfoliobox-like thumbnails */
+    .pb-thumb {
+      overflow: hidden;
+      border-radius: 6px;
+    }
+
+    .pb-thumb img {
+      transition: transform 450ms ease;
+      will-change: transform;
+    }
+
+    .pb-thumb:hover img {
+      transform: scale(1.06);
+    }
+
+    /* Accessibility: respect prefers-reduced-motion */
+    @media (prefers-reduced-motion: reduce) {
+
+      .fade-up,
+      .pb-thumb img,
+      .project-card,
+      .service-card-item {
+        animation: none !important;
+        transition: none !important;
+        transform: none !important;
+      }
+    }
+
+    /* Small helper utilities */
+    .muted {
+      color: var(--pb-muted);
+    }
+
+    .mb-4 {
+      margin-bottom: 1rem;
+    }
+
+    .mt-2 {
+      margin-top: 0.5rem;
+    }
+
+    /* Tone down previous neon/glow utilities to avoid visual conflict */
+    .glow-on-hover-blue,
+    .neon-box-glow,
+    .neon-text-glow {
+      box-shadow: none !important;
+      text-shadow: none !important;
+    }
+
+    :root {
+      --bg: #000000;
+      --text: #ffffff;
+      --card: #1a1a1a;
+      --muted: #a0a0a0;
+      --accent: #0ea5e9;
+    }
+
+    /* Remove the .dark class override */
+
+    /* Apply theme */
+    html,
+    body {
+      background: var(--bg);
+      color: var(--text);
+      transition: background 200ms ease, color 200ms ease;
+    }
+
+
+    /* ============================================
+   APPLE GOLD GRADIENT - Premium Dark/White Theme
+   Replaces cyan/blue with luxury gold/orange
+   ============================================ */
+
+    /* Global Gold Gradient Text Utility - NOW WHITE */
+    .text-gold-gradient {
+      background: none;
+      color: #ffffff;
+      -webkit-text-fill-color: #ffffff;
+    }
+
+    /* Gold Gradient Icon/SVG Utility - NOW WHITE */
+    .icon-gold-gradient {
+      background: none;
+      color: #ffffff;
+      -webkit-text-fill-color: #ffffff;
+    }
+
+    /* Gold Gradient for Highlights and Accents - NOW WHITE */
+    .highlight-gold-gradient {
+      background: none;
+      color: #ffffff;
+      -webkit-text-fill-color: #ffffff;
+    }
+
+    /* Gold Glow Effect on Hover */
+    .gold-glow:hover {
+      text-shadow: 0 0 20px rgba(255, 179, 89, 0.6), 0 0 40px rgba(230, 173, 77, 0.4);
+      transition: text-shadow 300ms ease;
+    }
+
+    /* Theme toggle button */
+    .theme-toggle {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.35rem 0.6rem;
+      border-radius: 0.5rem;
+      background: transparent;
+      border: 1px solid rgba(0, 0, 0, 0.06);
+      color: var(--text);
+      cursor: pointer;
+      transition: background 150ms ease, color 150ms ease;
+    }
+
+    .theme-toggle:hover {
+      background: rgba(0, 0, 0, 0.04);
+    }
+
+    /* Respect prefers-reduced-motion */
+    @media (prefers-reduced-motion: reduce) {
+      * {
+        transition: none !important;
+        animation: none !important;
+      }
+    }
+
+    /* ============================================
+   PREMIUM APPLE GOLD GRADIENT - Typography
+   ============================================ */
+
+    /* Gold Gradient - Main utility class - REPEATED DEFINITION UPDATED TO WHITE */
+    .text-gold-gradient {
+      background: none;
+      color: #ffffff;
+      -webkit-text-fill-color: #ffffff;
+      filter: none;
+    }
+
+    /* Tailwind-compatible gradient - NOW WHITE */
+    .bg-gradient-gold {
+      background: #ffffff;
+    }
+
+    /* Gold Gradient with glow effect - NOW WHITE */
+    .text-gold-gradient-glow {
+      background: none;
+      color: #ffffff;
+      -webkit-text-fill-color: #ffffff;
+      filter: drop-shadow(0 0 4px rgba(255, 255, 255, 0.2));
+      text-shadow: 0 0 20px rgba(255, 255, 255, 0.1);
+    }
+
+    /* Icon gold gradient - REPEATED DEFINITION UPDATED TO WHITE */
+    .icon-gold-gradient {
+      background: none;
+      color: #ffffff;
+      -webkit-text-fill-color: #ffffff;
+    }
+
+    /* Highlight gold gradient - REPEATED DEFINITION UPDATED TO WHITE */
+    .highlight-gold-gradient {
+      background: none;
+      color: #ffffff;
+      -webkit-text-fill-color: #ffffff;
+    }
+
+    /* ============================================
+     GLOBAL BLUE GRADIENT BRANDING
+     ============================================ */
+    .text-blue-gradient {
+      background-image: radial-gradient(circle farthest-corner at 10% 20%, rgba(0, 51, 102, 1) 0%, rgba(0, 102, 204, 1) 49.5%, rgba(0, 191, 255, 1) 90%);
+      background-clip: text;
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      color: transparent;
+      /* Fallback */
+    }
+
+    .bg-blue-gradient {
+      background-image: radial-gradient(circle farthest-corner at 10% 20%, rgba(0, 51, 102, 1) 0%, rgba(0, 102, 204, 1) 49.5%, rgba(0, 191, 255, 1) 90%);
+    }
+
+    /* Replace old gold gradient with blue for compatibility */
+    .text-gold-gradient {
+      background-image: radial-gradient(circle farthest-corner at 10% 20%, rgba(0, 51, 102, 1) 0%, rgba(0, 102, 204, 1) 49.5%, rgba(0, 191, 255, 1) 90%);
+      background-clip: text;
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      color: transparent;
+    }
+
+    .bg-gold-gradient {
+      background-image: radial-gradient(circle farthest-corner at 10% 20%, rgba(0, 51, 102, 1) 0%, rgba(0, 102, 204, 1) 49.5%, rgba(0, 191, 255, 1) 90%);
+    }
+
+    .icon-gold-gradient {
+      stroke: url(#blue-gradient);
+      /* For SVGs if needed, though usually handled via text color on lucide */
+      color: #0066cc;
+      /* Fallback */
+    }

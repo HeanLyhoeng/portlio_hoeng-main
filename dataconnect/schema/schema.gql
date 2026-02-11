@@ -1,0 +1,24 @@
+type User @table {
+  displayName: String!
+  email: String!
+  photoUrl: String
+  bio: String
+}
+
+type Project @table {
+  title: String!
+  description: String
+  category: String
+  projectUrl: String
+  createdAt: Timestamp!
+  user: User
+}
+
+type Media @table {
+  url: String!
+  mediaType: String!
+  position: Int!
+  altText: String
+  thumbnailUrl: String
+  project: Project
+}

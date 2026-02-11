@@ -1,0 +1,43 @@
+/* Scandinavian Minimalist Style for 'Gallery' Project */
+:root {
+  --scandi-font-stack: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  --scandi-text-color: #1a1a1a;
+  --scandi-font-size: 12px;
+  --scandi-letter-spacing: 0.06em;
+  --scandi-line-height: 1.6;
+}
+
+/* Dark Mode Overrides */
+.dark {
+  --scandi-text-color: #e6eef8;
+}
+
+.scandi-text {
+  font-family: var(--scandi-font-stack);
+  color: var(--scandi-text-color);
+  font-size: var(--scandi-font-size);
+  text-transform: uppercase;
+  letter-spacing: var(--scandi-letter-spacing);
+  line-height: var(--scandi-line-height);
+  font-weight: 400;
+}
+
+.scandi-text strong {
+  font-weight: 400;
+  display: block;
+  margin-bottom: 2px;
+}
+
+.scandi-link {
+  margin-top: 4px;
+  text-decoration: none;
+  color: var(--scandi-text-color);
+  border-bottom: 1px solid transparent;
+  width: fit-content;
+  transition: border-color 0.3s ease;
+  display: inline-block;
+}
+
+.scandi-link:hover {
+  border-bottom: 1px solid var(--scandi-text-color);
+}
