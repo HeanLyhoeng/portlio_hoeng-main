@@ -15,22 +15,7 @@ const youtubePath = "M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12
 export const Footer: React.FC = () => {
     const handleContactClick = (e: React.MouseEvent) => {
         e.preventDefault();
-        const isHomePage = window.location.hash === '' || window.location.hash === '#/';
-
-        if (isHomePage) {
-            const element = document.querySelector('#contact');
-            if (element) {
-                element.scrollIntoView({ behavior: 'smooth' });
-            }
-        } else {
-            window.location.hash = '';
-            setTimeout(() => {
-                const element = document.querySelector('#contact');
-                if (element) {
-                    element.scrollIntoView({ behavior: 'smooth' });
-                }
-            }, 300);
-        }
+        window.open('https://t.me/Hean_Lyhoeng', '_blank');
     };
 
     const productLinks = [

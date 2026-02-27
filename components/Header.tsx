@@ -109,43 +109,7 @@ export const Header: React.FC = () => {
   const handleContactClick = () => {
     try {
       setIsMobileMenuOpen(false); // Close mobile menu if open
-
-      const isHomePage = window.location.hash === '' || window.location.hash === '#/';
-
-      if (isHomePage) {
-        // Already on home page, just scroll
-        const element = document.querySelector('#contact');
-        if (element) {
-          const headerOffset = 80;
-          const elementPosition = element.getBoundingClientRect().top;
-          const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
-          window.scrollTo({
-            top: offsetPosition,
-            behavior: 'smooth'
-          });
-        }
-      } else {
-        // Navigate to home first
-        window.location.hash = '';
-
-        // Wait for navigation then scroll
-        setTimeout(() => {
-          try {
-            const element = document.querySelector('#contact');
-            if (element) {
-              const headerOffset = 80;
-              const elementPosition = element.getBoundingClientRect().top;
-              const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
-              window.scrollTo({
-                top: offsetPosition,
-                behavior: 'smooth'
-              });
-            }
-          } catch (e) {
-            console.error("Contact scroll error:", e);
-          }
-        }, 300);
-      }
+      window.open('https://t.me/Hean_Lyhoeng', '_blank');
     } catch (error) {
       console.error("Contact navigation error:", error);
     }
