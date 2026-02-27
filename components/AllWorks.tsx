@@ -213,20 +213,21 @@ export const AllWorks: React.FC<AllWorksProps> = ({ onBack }) => {
     };
 
     return (
-        <div className="min-h-screen bg-[#121212] text-white p-4 md:p-8">
+        <div className="min-h-screen bg-[#121212] text-white px-4 md:px-8 lg:px-16 py-6 md:py-8 overflow-x-hidden">
             {/* Header */}
-            <div className="flex items-center gap-4 mb-8 pt-4">
+            <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4 mb-6 md:mb-8 pt-4">
                 <button
                     onClick={handleBackClick}
-                    className="p-2 bg-gray-800/50 rounded-full hover:bg-neon-primary hover:text-black transition-colors"
+                    className="min-h-[44px] min-w-[44px] flex items-center justify-center p-2 bg-gray-800/50 rounded-full hover:bg-neon-primary hover:text-black transition-colors flex-shrink-0"
+                    aria-label="Back"
                 >
-                    <ChevronLeft className="w-6 h-6" />
+                    <ChevronLeft className="w-5 h-5 md:w-6 md:h-6" />
                 </button>
-                <div>
-                    <h1 className="text-3xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-white to-gray-400">
+                <div className="min-w-0 flex-1">
+                    <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-white to-gray-400 break-words">
                         All Works
                     </h1>
-                    <p className="text-gray-400 text-sm mt-1">
+                    <p className="text-gray-400 text-sm md:text-base mt-1">
                         Explore the complete collection
                     </p>
                 </div>
@@ -249,15 +250,12 @@ export const AllWorks: React.FC<AllWorksProps> = ({ onBack }) => {
                     <div className="w-12 h-12 border-4 border-neon-primary border-t-transparent rounded-full animate-spin" />
                 </div>
             ) : (
-                <div className="columns-1 sm:columns-2 md:columns-3 lg:columns-4 gap-4 space-y-4 mx-auto pb-20">
+                <div className="columns-1 sm:columns-2 md:columns-3 lg:columns-4 gap-3 md:gap-4 space-y-4 mx-auto pb-20">
                     {items.map((item) => (
-                        <div key={item.id} className="break-inside-avoid mb-6">
+                        <div key={item.id} className="break-inside-avoid mb-4 md:mb-6">
                             <div
-                                className="group relative rounded-xl overflow-hidden bg-zinc-900/50 cursor-pointer"
-                                onClick={() => {
-                                    console.log('Clicked item:', item.title);
-                                    setSelectedItem(item);
-                                }}
+                                className="group relative rounded-lg md:rounded-xl overflow-hidden bg-zinc-900/50 cursor-pointer"
+                                onClick={() => setSelectedItem(item)}
                             >
                                 <img
                                     src={item.imageUrl}
@@ -268,11 +266,11 @@ export const AllWorks: React.FC<AllWorksProps> = ({ onBack }) => {
                                 />
 
                                 {/* Overlay */}
-                                <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col justify-end p-6">
-                                    <span className="text-xs font-bold text-neon-primary uppercase tracking-wider mb-2">
+                                <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col justify-end p-4 md:p-6">
+                                    <span className="text-[10px] md:text-xs font-bold text-neon-primary uppercase tracking-wider mb-1 md:mb-2">
                                         {item.category}
                                     </span>
-                                    <h3 className="text-xl font-bold text-white line-clamp-2">
+                                    <h3 className="text-base md:text-lg lg:text-xl font-bold text-white line-clamp-2 break-words">
                                         {item.title}
                                     </h3>
                                 </div>
@@ -291,25 +289,26 @@ export const AllWorks: React.FC<AllWorksProps> = ({ onBack }) => {
             {/* Lightbox Modal */}
             {selectedItem && (
                 <div
-                    className="fixed inset-0 z-[100] flex items-center justify-center bg-black/90 backdrop-blur-sm p-4 transition-all duration-300"
+                    className="fixed inset-0 z-[100] flex items-center justify-center bg-black/90 backdrop-blur-sm p-3 md:p-4 transition-all duration-300"
                     onClick={() => setSelectedItem(null)}
                 >
                     <button
                         onClick={() => setSelectedItem(null)}
-                        className="absolute top-4 right-4 p-2 bg-white/10 rounded-full hover:bg-white/20 transition-colors z-[101]"
+                        className="absolute top-3 right-3 md:top-4 md:right-4 min-h-[44px] min-w-[44px] flex items-center justify-center p-2 bg-white/10 rounded-full hover:bg-white/20 transition-colors z-[101]"
+                        aria-label="Close"
                     >
-                        <X className="w-6 h-6 text-white" />
+                        <X className="w-5 h-5 md:w-6 md:h-6 text-white" />
                     </button>
 
                     <div
-                        className="relative max-w-[90vw] max-h-[90vh]"
+                        className="relative w-full max-w-[95vw] md:max-w-[90vw] max-h-[85vh] md:max-h-[90vh] flex items-center justify-center"
                         onClick={(e) => e.stopPropagation()}
                     >
                         {selectedItem.category === 'Video Editing' && selectedItem.videoUrl ? (
                             <iframe
                                 src={selectedItem.videoUrl}
                                 title={selectedItem.title}
-                                className="w-[80vw] h-[80vh] rounded-lg shadow-2xl"
+                                className="w-full max-w-[95vw] md:w-[80vw] h-[50vh] md:h-[80vh] rounded-lg shadow-2xl"
                                 allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                                 allowFullScreen
                             />
@@ -323,9 +322,9 @@ export const AllWorks: React.FC<AllWorksProps> = ({ onBack }) => {
                             />
                         )}
 
-                        <div className="absolute bottom-0 left-0 right-0 p-4 bg-gradient-to-t from-black/80 to-transparent text-white rounded-b-lg opacity-0 hover:opacity-100 transition-opacity">
-                            <h3 className="text-xl font-bold">{selectedItem.title}</h3>
-                            <p className="text-sm text-neon-primary">{selectedItem.category}</p>
+                        <div className="absolute bottom-0 left-0 right-0 p-3 md:p-4 bg-gradient-to-t from-black/80 to-transparent text-white rounded-b-lg opacity-0 hover:opacity-100 transition-opacity">
+                            <h3 className="text-base md:text-xl font-bold break-words">{selectedItem.title}</h3>
+                            <p className="text-xs md:text-sm text-neon-primary">{selectedItem.category}</p>
                         </div>
                     </div>
                 </div>

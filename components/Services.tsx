@@ -178,7 +178,7 @@ export const Services: React.FC<{ onBack: () => void }> = ({ onBack }) => {
       {/* Hero Section */}
       <section className="pt-20 sm:pt-24 pb-12 sm:pb-16 md:pb-24 relative">
         <div className="absolute inset-0 bg-gradient-to-b from-black via-black/95 to-black pointer-events-none z-0" />
-        <div className="container mx-auto px-4 sm:px-6 relative z-10">
+        <div className="container mx-auto px-4 md:px-8 lg:px-16 relative z-10">
           <button
             onClick={onBack}
             className="flex items-center gap-2 text-slate-400 hover:text-blue-gradient transition-colors mb-8 group"
@@ -193,12 +193,10 @@ export const Services: React.FC<{ onBack: () => void }> = ({ onBack }) => {
             transition={{ duration: 0.5 }}
             className="max-w-4xl mx-auto text-center"
           >
-            {/* Apple Typography: tracking-tighter for h1 */}
-            <h1 className="text-4xl sm:text-5xl md:text-6xl font-semibold text-white mb-6 tracking-tighter">
+            <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-semibold text-white mb-6 tracking-tighter break-words hyphens-auto">
               A design-driven AI & product partner
             </h1>
-            {/* Apple Typography: text-white/70 for paragraphs, leading-relaxed */}
-            <p className="text-lg sm:text-xl text-white/70 leading-relaxed">
+            <p className="text-sm md:text-base lg:text-lg text-white/70 leading-relaxed">
               We help startups and tech companies build exceptional digital products through design, development, and AI integration.
             </p>
           </motion.div>
@@ -207,7 +205,7 @@ export const Services: React.FC<{ onBack: () => void }> = ({ onBack }) => {
 
       {/* Service Offerings - Premium Minimalist Design */}
       <section className="py-12 sm:py-16 md:py-20 bg-black services-section" id="our-services">
-        <div className="container mx-auto px-4 sm:px-6">
+        <div className="container mx-auto px-4 md:px-8 lg:px-16">
           <div className="services-animated-header mb-8 sm:mb-12">
             <div className="services-title" aria-hidden="false">
               {/* Minimal "OUR SERVICES" title */}
@@ -217,7 +215,7 @@ export const Services: React.FC<{ onBack: () => void }> = ({ onBack }) => {
             </div>
           </div>
           <motion.div
-            className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 max-w-7xl mx-auto"
+            className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-6 md:gap-8 max-w-7xl mx-auto"
             initial="hidden"
             whileInView="visible"
             viewport={{ once: true, margin: "-100px" }}
@@ -249,7 +247,7 @@ export const Services: React.FC<{ onBack: () => void }> = ({ onBack }) => {
                 }}
               >
                 {/* Category Heading - Apple Typography: tracking-tighter */}
-                <h3 className="text-xl sm:text-2xl font-semibold text-white mb-6 tracking-tight">
+                <h3 className="text-lg sm:text-xl md:text-2xl font-semibold text-white mb-4 md:mb-6 tracking-tight break-words">
                   {service.title}
                 </h3>
 
@@ -287,9 +285,8 @@ export const Services: React.FC<{ onBack: () => void }> = ({ onBack }) => {
 
       {/* Industries - Updated UI */}
       <section className="py-12 sm:py-16 md:py-20 bg-transparent">
-        <div className="container mx-auto px-4 sm:px-6">
-          {/* Apple Typography: tracking-tighter for h2 */}
-          <h2 className="text-3xl sm:text-4xl font-semibold text-white mb-12 text-center tracking-tighter">
+        <div className="container mx-auto px-4 md:px-8 lg:px-16">
+          <h2 className="text-2xl sm:text-3xl md:text-4xl font-semibold text-white mb-8 md:mb-12 text-center tracking-tighter break-words">
             Industries We Serve
           </h2>
           <div className="max-w-4xl mx-auto divide-y divide-white/10">
@@ -299,9 +296,8 @@ export const Services: React.FC<{ onBack: () => void }> = ({ onBack }) => {
                 <div className="hidden" />
                 <div>
                   {/* Apple Typography: tracking-tight for h3 */}
-                  <h3 className="text-xl sm:text-2xl font-semibold text-white mb-2 tracking-tight">{industry.name}</h3>
-                  {/* Apple Typography: text-white/70 for paragraphs */}
-                  <p className="text-white/70 leading-relaxed">{industry.description}</p>
+                  <h3 className="text-lg sm:text-xl md:text-2xl font-semibold text-white mb-2 tracking-tight break-words">{industry.name}</h3>
+                  <p className="text-sm md:text-base text-white/70 leading-relaxed">{industry.description}</p>
                 </div>
               </div>
             ))}
@@ -311,12 +307,11 @@ export const Services: React.FC<{ onBack: () => void }> = ({ onBack }) => {
 
       {/* Process Section */}
       <section className="py-12 sm:py-16 md:py-20">
-        <div className="container mx-auto px-4 sm:px-6">
-          {/* Apple Typography: tracking-tighter for h2 */}
-          <h2 className="text-3xl sm:text-4xl font-semibold text-white text-center mb-8 sm:mb-12 tracking-tighter">
+        <div className="container mx-auto px-4 md:px-8 lg:px-16">
+          <h2 className="text-2xl sm:text-3xl md:text-4xl font-semibold text-white text-center mb-8 sm:mb-12 tracking-tighter break-words">
             We simplify product Design process
           </h2>
-          <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6 max-w-7xl mx-auto">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6 max-w-7xl mx-auto">
             {processSteps.map((phase, i) => (
               <motion.div
                 key={i}
@@ -326,10 +321,10 @@ export const Services: React.FC<{ onBack: () => void }> = ({ onBack }) => {
                 transition={{ delay: i * 0.1 }}
                 className="process-card-item bg-black border border-white/10 rounded-xl p-6"
               >
-                <h3 className="text-xl font-bold text-white mb-4">{phase.phase}</h3>
+                <h3 className="text-lg md:text-xl font-bold text-white mb-3 md:mb-4 break-words">{phase.phase}</h3>
                 <ul className="space-y-2">
                   {phase.steps.map((step, j) => (
-                    <li key={j} className="text-white text-sm flex items-center gap-2">
+                    <li key={j} className="text-white text-sm md:text-base flex items-center gap-2">
                       <div className="w-1.5 h-1.5 rounded-full bg-blue-gradient" />
                       {step}
                     </li>
@@ -343,13 +338,11 @@ export const Services: React.FC<{ onBack: () => void }> = ({ onBack }) => {
 
       {/* Testimonials */}
       <section className="py-12 sm:py-16 md:py-20 bg-black">
-        <div className="container mx-auto px-4 sm:px-6">
-          {/* Apple Typography: tracking-tighter for h2 */}
-          <h2 className="text-3xl sm:text-4xl font-semibold text-white text-center mb-4 tracking-tighter">
+        <div className="container mx-auto px-4 md:px-8 lg:px-16">
+          <h2 className="text-2xl sm:text-3xl md:text-4xl font-semibold text-white text-center mb-4 tracking-tighter break-words">
             Trusted by forward-thinking teams
           </h2>
-          {/* Apple Typography: text-white/70 for paragraphs */}
-          <p className="text-lg sm:text-xl text-white/70 text-center mb-8 sm:mb-12 leading-relaxed">
+          <p className="text-sm md:text-base lg:text-lg text-white/70 text-center mb-8 sm:mb-12 leading-relaxed">
             Empowering fast-growing companies with design-driven, AI-powered solutions built for scale.
           </p>
           {/* Frame removed per request — only heading + paragraph are shown here */}
@@ -359,26 +352,26 @@ export const Services: React.FC<{ onBack: () => void }> = ({ onBack }) => {
 
 
       {/* Final CTA Section */}
-      <div className="w-full mt-24 px-4 pb-20">
-        <div className="max-w-5xl mx-auto relative rounded-[32px] overflow-hidden bg-white/5 border border-white/10 p-12 md:p-20 text-center group">
+      <div className="w-full mt-16 md:mt-24 px-4 md:px-8 lg:px-16 pb-16 md:pb-20">
+        <div className="max-w-5xl mx-auto relative rounded-2xl md:rounded-[32px] overflow-hidden bg-white/5 border border-white/10 p-6 md:p-12 lg:p-20 text-center group">
 
           {/* Background Glow Effect */}
           <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-full bg-gradient-to-b from-blue-500/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none" />
 
           {/* Content */}
           <div className="relative z-10">
-            <h2 className="text-4xl md:text-6xl font-bold text-white tracking-tighter mb-6">
+            <h2 className="text-3xl md:text-5xl lg:text-6xl font-bold text-white tracking-tighter mb-4 md:mb-6 break-words hyphens-auto">
               Get started with us. <br className="hidden md:block" />
               <span className="text-gray-500">Have a vision? Let's build it.</span>
             </h2>
 
-            <p className="text-xl text-gray-400 mb-10">
+            <p className="text-sm md:text-base lg:text-xl text-gray-400 mb-8 md:mb-10">
               Ready to transform your product? Let's work together to build something extraordinary.
             </p>
 
             <button
               onClick={() => window.location.hash = '#contact'}
-              className="bg-white text-black font-bold text-lg px-10 py-4 rounded-full hover:bg-gray-200 transition-all flex items-center gap-2 mx-auto hover:gap-4 hover:scale-105 shadow-lg"
+              className="w-full sm:w-auto min-h-[48px] bg-white text-black font-bold text-base md:text-lg px-8 md:px-10 py-3 md:py-4 rounded-full hover:bg-gray-200 transition-all flex items-center justify-center gap-2 mx-auto hover:gap-4 hover:scale-105 shadow-lg"
             >
               Get Started
               {/* Arrow Icon */}

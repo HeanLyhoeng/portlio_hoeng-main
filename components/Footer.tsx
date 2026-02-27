@@ -53,26 +53,26 @@ export const Footer: React.FC = () => {
     ];
 
     return (
-        <footer id="contact" className="bg-black border-t border-white/10 pt-16 pb-8">
-            <div className="max-w-7xl mx-auto px-4 sm:px-6">
-                <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-8 mb-12">
+        <footer id="contact" className="bg-black border-t border-white/10 pt-12 md:pt-16 pb-6 md:pb-8 overflow-x-hidden">
+            <div className="max-w-7xl mx-auto px-4 md:px-8 lg:px-16">
+                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-6 md:gap-8 mb-10 md:mb-12">
 
-                    {/* Brand Column (Spans 2 cols on large screens) */}
-                    <div className="col-span-2 lg:col-span-2">
+                    {/* Brand Column - full width on mobile, 2 cols on lg+ */}
+                    <div className="sm:col-span-2 lg:col-span-2">
                         <a href="#" className="flex items-center gap-3 group mb-4">
                             <img
                                 src="https://jqszlmcwearhovsjknat.supabase.co/storage/v1/object/public/avatars/freepik__a-white-abstract-cube-logo-is-centered-on-a-black-__84990.png"
                                 alt="LYHOENG-DESIGN Logo"
-                                className="w-10 h-10 object-contain rounded-md"
+                                className="w-9 h-9 md:w-10 md:h-10 object-contain rounded-md flex-shrink-0"
                                 loading="lazy"
                                 decoding="async"
                             />
-                            <span className="text-xl font-bold tracking-wider font-mono text-white">
+                            <span className="text-lg md:text-xl font-bold tracking-wider font-mono text-white break-words">
                                 LYHOENG-DESIGN
                             </span>
                         </a>
                         <h2 className="sr-only">LYHOENG-DESIGN</h2>
-                        <p className="text-gray-400 text-sm max-w-xs mb-6 leading-relaxed">
+                        <p className="text-gray-400 text-sm md:text-base max-w-xs mb-4 md:mb-6 leading-relaxed">
                             Crafting interfaces that are not only visually stunning but also intuitive and accessible.
                         </p>
                         {/* Social Icons */}
@@ -90,11 +90,11 @@ export const Footer: React.FC = () => {
 
                     {/* Product Column */}
                     <div>
-                        <h3 className="text-white font-semibold mb-4">Services</h3>
-                        <ul className="space-y-3">
+                        <h3 className="text-white font-semibold text-sm md:text-base mb-3 md:mb-4">Services</h3>
+                        <ul className="space-y-2 md:space-y-3">
                             {productLinks.map((item) => (
                                 <li key={item.name}>
-                                    <a href={item.href} className="text-zinc-400 hover:text-white text-sm transition-colors">
+                                    <a href={item.href} className="text-zinc-400 hover:text-white text-sm md:text-base transition-colors block py-1">
                                         {item.name}
                                     </a>
                                 </li>
@@ -104,14 +104,14 @@ export const Footer: React.FC = () => {
 
                     {/* Company Column */}
                     <div>
-                        <h3 className="text-white font-semibold mb-4">Company</h3>
-                        <ul className="space-y-3">
+                        <h3 className="text-white font-semibold text-sm md:text-base mb-3 md:mb-4">Company</h3>
+                        <ul className="space-y-2 md:space-y-3">
                             {companyLinks.map((item) => (
                                 <li key={item.name}>
                                     <a
                                         href={item.href}
                                         onClick={item.name === 'Contact' ? handleContactClick : undefined}
-                                        className="text-zinc-400 hover:text-white text-sm transition-colors"
+                                        className="text-zinc-400 hover:text-white text-sm md:text-base transition-colors block py-1.5"
                                     >
                                         {item.name}
                                     </a>
@@ -122,11 +122,11 @@ export const Footer: React.FC = () => {
 
                     {/* Legal Column */}
                     <div>
-                        <h3 className="text-white font-semibold mb-4">Legal</h3>
-                        <ul className="space-y-3">
+                        <h3 className="text-white font-semibold text-sm md:text-base mb-3 md:mb-4">Legal</h3>
+                        <ul className="space-y-2 md:space-y-3">
                             {legalLinks.map((item) => (
                                 <li key={item.name}>
-                                    <a href={item.href} className="text-zinc-400 hover:text-white text-sm transition-colors">
+                                    <a href={item.href} className="text-zinc-400 hover:text-white text-sm md:text-base transition-colors block py-1">
                                         {item.name}
                                     </a>
                                 </li>
@@ -137,8 +137,8 @@ export const Footer: React.FC = () => {
                 </div>
 
                 {/* Bottom Bar */}
-                <div className="border-t border-white/10 pt-8 flex flex-col md:flex-row justify-between items-center gap-4">
-                    <p className="text-gray-500 text-sm">© 2026 LYHOENG-DESIGN. All rights reserved.</p>
+                <div className="border-t border-white/10 pt-6 md:pt-8 flex flex-col md:flex-row justify-between items-center gap-3 md:gap-4 text-center md:text-left">
+                    <p className="text-gray-500 text-xs md:text-sm break-words">© 2026 LYHOENG-DESIGN. All rights reserved.</p>
                 </div>
             </div>
         </footer>

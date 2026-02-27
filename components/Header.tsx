@@ -200,8 +200,8 @@ export const Header: React.FC = () => {
       <header
         className="fixed top-0 left-0 z-50 w-full bg-black/90 backdrop-blur-md transition-all duration-300 py-4"
       >
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex items-center justify-between h-16">
+        <div className="max-w-7xl mx-auto px-4 md:px-8 lg:px-16">
+          <div className="flex items-center justify-between h-14 md:h-16">
             {/* Logo - Minimal Apple style, smaller */}
             <a
               href="#/"
@@ -222,7 +222,7 @@ export const Header: React.FC = () => {
               <span>LYHOENG-DESIGN</span>
             </a>
 
-            {/* Desktop Nav - Centered */}
+            {/* Desktop Nav - hidden on mobile/tablet; visible lg+ */}
             <nav className="hidden lg:flex items-center justify-center gap-6 xl:gap-8 absolute left-1/2 transform -translate-x-1/2">
               {navLinks.map((link) => (
                 <a
@@ -267,9 +267,9 @@ export const Header: React.FC = () => {
                 Contact Me
               </button>
 
-              {/* Mobile Menu Toggle */}
+              {/* Hamburger: visible on mobile/tablet only (block lg:hidden); min 44px touch target */}
               <button
-                className="lg:hidden p-1.5 transition-opacity duration-300 hover:opacity-70"
+                className="block lg:hidden min-h-[44px] min-w-[44px] flex items-center justify-center p-2 -m-1 transition-opacity duration-300 hover:opacity-70"
                 style={{ color: textColorHover }}
                 onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
                 aria-label="Toggle menu"
@@ -322,13 +322,13 @@ export const Header: React.FC = () => {
               onClick={() => setIsMobileMenuOpen(false)}
             />
 
-            {/* Menu Drawer */}
+            {/* Menu Drawer - full screen overlay, large touch targets */}
             <motion.div
               initial="closed"
               animate="open"
               exit="closed"
               variants={menuVariants}
-              className="fixed top-0 left-0 right-0 z-[1000] lg:hidden pt-20 pb-8 px-6 overflow-y-auto max-h-screen"
+              className="fixed inset-0 z-[1000] lg:hidden pt-20 pb-8 px-4 md:px-8 overflow-y-auto max-h-screen"
               style={{
                 background: glassBg,
                 backdropFilter: 'blur(20px)',
@@ -341,7 +341,7 @@ export const Header: React.FC = () => {
                     key={link.name}
                     href={link.href}
                     variants={itemVariants}
-                    className="text-base font-normal tracking-wide py-3 px-4 rounded-lg transition-all duration-300"
+                    className="text-base md:text-lg font-normal tracking-wide min-h-[48px] flex items-center py-4 px-4 rounded-lg transition-all duration-300"
                     style={{
                       color: textColor,
                       fontFamily: '-apple-system, BlinkMacSystemFont, "SF Pro Display", "Inter", sans-serif',
@@ -447,7 +447,7 @@ export const Header: React.FC = () => {
                 >
                   <button
                     onClick={handleContactClick}
-                    className="w-full px-5 py-3 rounded-full text-sm font-medium transition-opacity duration-300"
+                    className="w-full min-h-[48px] px-5 py-4 rounded-full text-sm md:text-base font-medium transition-opacity duration-300"
                     style={{
                       background: 'rgba(255, 255, 255, 1)',
                       color: 'rgba(0, 0, 0, 1)',

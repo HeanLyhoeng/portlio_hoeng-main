@@ -499,7 +499,7 @@ export const AboutUs: React.FC<{ onBack: () => void }> = ({ onBack }) => {
       {/* Hero Section */}
       <section className="pt-20 sm:pt-24 pb-12 sm:pb-16 md:pb-24 relative">
         <div className="absolute inset-0 bg-gradient-to-b from-black via-black/95 to-black pointer-events-none z-0" />
-        <div className="container mx-auto px-4 sm:px-6 relative z-10">
+        <div className="container mx-auto px-4 md:px-8 lg:px-16 relative z-10">
           <button
             onClick={onBack}
             className="flex items-center gap-2 text-slate-400 hover:text-neon-primary transition-colors mb-8 group"
@@ -514,11 +514,10 @@ export const AboutUs: React.FC<{ onBack: () => void }> = ({ onBack }) => {
             transition={{ duration: 0.5 }}
             className="max-w-4xl mx-auto text-center"
           >
-            <h1 className="text-4xl sm:text-5xl md:text-6xl font-bold text-white mb-6">
-              {/* heading text retained, hero frame removed */}
+            <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-6 break-words hyphens-auto">
               Design studio for AI, SaaS & tech startups
             </h1>
-            <p className="text-lg sm:text-xl text-slate-400 leading-relaxed">
+            <p className="text-sm md:text-base lg:text-lg text-slate-400 leading-relaxed">
               We're a product design & AI studio that helps startups and tech companies build exceptional digital products.
             </p>
           </motion.div>
@@ -527,12 +526,12 @@ export const AboutUs: React.FC<{ onBack: () => void }> = ({ onBack }) => {
 
       {/* Executive Team - Premium Minimalist Design */}
       <section className="py-12 sm:py-16 md:py-20 bg-black about-outcomes-wrapper">
-        <div className="container mx-auto px-4 sm:px-6">
-          <h2 className="text-3xl sm:text-4xl font-bold text-white text-center mb-8 sm:mb-12">
+        <div className="container mx-auto px-4 md:px-8 lg:px-16">
+          <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-white text-center mb-8 sm:mb-12 break-words">
             Executive Team
           </h2>
           <motion.div
-            className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-6xl mx-auto"
+            className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8 max-w-6xl mx-auto"
             initial="hidden"
             whileInView="visible"
             viewport={{ once: true, margin: "-100px" }}
@@ -584,7 +583,7 @@ export const AboutUs: React.FC<{ onBack: () => void }> = ({ onBack }) => {
                   <h3 className="font-bold text-lg sm:text-xl text-white mb-1 uppercase tracking-wide">
                     {member.name}
                   </h3>
-                  <p className="text-xs sm:text-sm text-slate-400 uppercase tracking-wider">
+                  <p className="text-xs sm:text-sm text-slate-400 uppercase tracking-wider break-words">
                     {member.role}
                   </p>
                 </div>
@@ -596,8 +595,8 @@ export const AboutUs: React.FC<{ onBack: () => void }> = ({ onBack }) => {
 
       {/* Awards & Achievements */}
       <section className="py-12 sm:py-16 md:py-20">
-        <div className="container mx-auto px-4 sm:px-6">
-          <h2 className="text-3xl sm:text-4xl font-bold text-white text-center mb-8 sm:mb-12">
+        <div className="container mx-auto px-4 md:px-8 lg:px-16">
+          <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-white text-center mb-8 sm:mb-12 break-words">
             Awards & Achievements
           </h2>
           <div className="max-w-4xl mx-auto">
@@ -636,12 +635,12 @@ export const AboutUs: React.FC<{ onBack: () => void }> = ({ onBack }) => {
 
       {/* Outcomes and Results - Premium Minimalist Design */}
       <section className="py-12 sm:py-16 md:py-20 bg-black">
-        <div className="container mx-auto px-4 sm:px-6">
-          <h2 className="text-3xl sm:text-4xl font-bold text-white text-center mb-8 sm:mb-12">
+        <div className="container mx-auto px-4 md:px-8 lg:px-16">
+          <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-white text-center mb-8 sm:mb-12 break-words">
             Outcomes and Results
           </h2>
           <motion.div
-            className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-6xl mx-auto"
+            className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8 max-w-6xl mx-auto"
             initial="hidden"
             whileInView="visible"
             viewport={{ once: true, margin: "-100px" }}
@@ -697,12 +696,12 @@ export const AboutUs: React.FC<{ onBack: () => void }> = ({ onBack }) => {
                 )}
 
                 {/* Result Metric - High Contrast */}
-                <p className="text-3xl sm:text-4xl font-black text-neon-primary mb-4">
+                <p className="text-2xl sm:text-3xl md:text-4xl font-black text-neon-primary mb-4 break-words">
                   {outcome.metric}
                 </p>
 
                 {/* Description - Clean Typography */}
-                <p className="text-sm text-slate-400 leading-relaxed">
+                <p className="text-sm md:text-base text-slate-400 leading-relaxed">
                   {outcome.description}
                 </p>
               </motion.div>
