@@ -139,17 +139,7 @@ export const Hero: React.FC<HeroProps> = ({ activeMenu = 'home' }) => {
 
           {/* RIGHT: Foreground Image Cutout */}
           <div className="w-full h-full flex justify-center md:justify-end items-end pointer-events-none z-10 self-end overflow-visible">
-            <img
-              src="https://jqszlmcwearhovsjknat.supabase.co/storage/v1/object/public/avatars/4.png"
-              alt="Portrait"
-              className="w-full md:w-auto h-[60vh] md:h-[90vh] lg:h-[105vh] xl:h-[115vh] object-contain object-bottom drop-shadow-2xl origin-bottom md:scale-110 lg:scale-125 xl:scale-150"
-              loading="lazy"
-              decoding="async"
-              style={{
-                maskImage: 'linear-gradient(to bottom, black 90%, transparent 100%)',
-                WebkitMaskImage: 'linear-gradient(to bottom, black 90%, transparent 100%)'
-              }}
-            />
+
           </div>
 
         </div>
