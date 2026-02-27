@@ -135,7 +135,7 @@ export const Hero: React.FC<HeroProps> = ({ activeMenu = 'home' }) => {
         {/* LAYER 2: Foreground Cutout — Mobile: Stacked; Tablet/Desktop: Absolute Right */}
         <div className="relative mt-8 md:mt-0 md:absolute md:bottom-0 md:right-0 z-20 pointer-events-none flex justify-center md:justify-end items-end h-full w-full md:w-auto">
           <img
-            src="https://jqszlmcwearhovsjknat.supabase.co/storage/v1/object/public/avatars/4.png"
+            src="https://jqszlmcwearhovsjknat.supabase.co/storage/v1/object/public/avatars/PNG.png"
             alt="Portrait"
             className="w-full h-auto max-h-[60vh] md:h-[90vh] lg:h-[95vh] lg:w-auto object-contain object-bottom drop-shadow-2xl opacity-100"
             loading="lazy"
