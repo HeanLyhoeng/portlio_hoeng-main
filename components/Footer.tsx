@@ -46,9 +46,9 @@ export const Footer: React.FC = () => {
                     <div className="sm:col-span-2 lg:col-span-2">
                         <a href="#" className="flex items-center gap-3 group mb-4">
                             <img
-                                src="https://jqszlmcwearhovsjknat.supabase.co/storage/v1/object/public/avatars/freepik__a-white-abstract-cube-logo-is-centered-on-a-black-__84990.png"
+                                src="https://jqszlmcwearhovsjknat.supabase.co/storage/v1/object/public/avatars/nft_text_effect.png"
                                 alt="LYHOENG-DESIGN Logo"
-                                className="w-9 h-9 md:w-10 md:h-10 object-contain rounded-md flex-shrink-0"
+                                className="w-16 h-16 md:w-20 md:h-20 object-contain rounded-md flex-shrink-0"
                                 loading="lazy"
                                 decoding="async"
                             />

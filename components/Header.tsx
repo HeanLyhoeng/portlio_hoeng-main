@@ -177,9 +177,9 @@ export const Header: React.FC = () => {
               }}
             >
               <img
-                src="https://jqszlmcwearhovsjknat.supabase.co/storage/v1/object/public/avatars/freepik__a-white-abstract-cube-logo-is-centered-on-a-black-__84990.png"
+                src="https://jqszlmcwearhovsjknat.supabase.co/storage/v1/object/public/avatars/nft_text_effect.png"
                 alt="LYHOENG-DESIGN Logo"
-                className="w-8 h-8 object-contain rounded-md"
+                className="w-16 h-16 object-contain rounded-md"
                 loading="eager"
                 decoding="async"
               />
